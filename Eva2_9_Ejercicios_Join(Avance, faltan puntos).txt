@@ -1,0 +1,2402 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 11
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| agencia            |
+| comp2              |
+| company            |
+| credit_cards       |
+| eva_2              |
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+12 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  SQL > \use comp2
+Default schema set to `comp2`.
+Fetching global names, object names from `comp2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  comp2  SQL > desc empleado;
+ERROR: 1146 (42S02): Table 'comp2.empleado' doesn't exist
+ MySQL  localhost:3306 ssl  comp2  SQL > show tables;
++-----------------+
+| Tables_in_comp2 |
++-----------------+
+| countries       |
+| departments     |
+| employees       |
+| job_history     |
+| jobs            |
+| locations       |
+| regions         |
++-----------------+
+7 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employee;
+ERROR: 1146 (42S02): Table 'comp2.employee' doesn't exist
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | decimal(6,0) | NO   | PRI | 0       |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(25)  | NO   | MUL | NULL    |       |
+| EMAIL          | varchar(25)  | NO   | UNI | NULL    |       |
+| PHONE_NUMBER   | varchar(20)  | YES  |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   | MUL | NULL    |       |
+| SALARY         | decimal(8,2) | YES  |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | NULL    |       |
+| MANAGER_ID     | decimal(6,0) | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc jobs;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| JOB_ID     | varchar(10)  | NO   | PRI |         |       |
+| JOB_TITLE  | varchar(35)  | NO   |     | NULL    |       |
+| MIN_SALARY | decimal(6,0) | YES  |     | NULL    |       |
+| MAX_SALARY | decimal(6,0) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name, b.job_title
+                                      -> from employees a inner join jobs b
+                                      -> on a.job_id = b.job_id;
++-------------+-------------+-------------+---------------------------------+
+| employee_id | first_name  | last_name   | job_title                       |
++-------------+-------------+-------------+---------------------------------+
+|         206 | William     | Gietz       | Public Accountant               |
+|         205 | Shelley     | Higgins     | Accounting Manager              |
+|         200 | Jennifer    | Whalen      | Administration Assistant        |
+|         100 | Steven      | King        | President                       |
+|         101 | Neena       | Kochhar     | Administration Vice President   |
+|         102 | Lex         | De Haan     | Administration Vice President   |
+|         109 | Daniel      | Faviet      | Accountant                      |
+|         110 | John        | Chen        | Accountant                      |
+|         111 | Ismael      | Sciarra     | Accountant                      |
+|         112 | Jose Manuel | Urman       | Accountant                      |
+|         113 | Luis        | Popp        | Accountant                      |
+|         108 | Nancy       | Greenberg   | Finance Manager                 |
+|         203 | Susan       | Mavris      | Human Resources Representative  |
+|         103 | Alexander   | Hunold      | Programmer                      |
+|         104 | Bruce       | Ernst       | Programmer                      |
+|         105 | David       | Austin      | Programmer                      |
+|         106 | Valli       | Pataballa   | Programmer                      |
+|         107 | Diana       | Lorentz     | Programmer                      |
+|         201 | Michael     | Hartstein   | Marketing Manager               |
+|         202 | Pat         | Fay         | Marketing Representative        |
+|         204 | Hermann     | Baer        | Public Relations Representative |
+|         115 | Alexander   | Khoo        | Purchasing Clerk                |
+|         116 | Shelli      | Baida       | Purchasing Clerk                |
+|         117 | Sigal       | Tobias      | Purchasing Clerk                |
+|         118 | Guy         | Himuro      | Purchasing Clerk                |
+|         119 | Karen       | Colmenares  | Purchasing Clerk                |
+|         114 | Den         | Raphaely    | Purchasing Manager              |
+|         145 | John        | Russell     | Sales Manager                   |
+|         146 | Karen       | Partners    | Sales Manager                   |
+|         147 | Alberto     | Errazuriz   | Sales Manager                   |
+|         148 | Gerald      | Cambrault   | Sales Manager                   |
+|         149 | Eleni       | Zlotkey     | Sales Manager                   |
+|         150 | Peter       | Tucker      | Sales Representative            |
+|         151 | David       | Bernstein   | Sales Representative            |
+|         152 | Peter       | Hall        | Sales Representative            |
+|         153 | Christopher | Olsen       | Sales Representative            |
+|         154 | Nanette     | Cambrault   | Sales Representative            |
+|         155 | Oliver      | Tuvault     | Sales Representative            |
+|         156 | Janette     | King        | Sales Representative            |
+|         157 | Patrick     | Sully       | Sales Representative            |
+|         158 | Allan       | McEwen      | Sales Representative            |
+|         159 | Lindsey     | Smith       | Sales Representative            |
+|         160 | Louise      | Doran       | Sales Representative            |
+|         161 | Sarath      | Sewall      | Sales Representative            |
+|         162 | Clara       | Vishney     | Sales Representative            |
+|         163 | Danielle    | Greene      | Sales Representative            |
+|         164 | Mattea      | Marvins     | Sales Representative            |
+|         165 | David       | Lee         | Sales Representative            |
+|         166 | Sundar      | Ande        | Sales Representative            |
+|         167 | Amit        | Banda       | Sales Representative            |
+|         168 | Lisa        | Ozer        | Sales Representative            |
+|         169 | Harrison    | Bloom       | Sales Representative            |
+|         170 | Tayler      | Fox         | Sales Representative            |
+|         171 | William     | Smith       | Sales Representative            |
+|         172 | Elizabeth   | Bates       | Sales Representative            |
+|         173 | Sundita     | Kumar       | Sales Representative            |
+|         174 | Ellen       | Abel        | Sales Representative            |
+|         175 | Alyssa      | Hutton      | Sales Representative            |
+|         176 | Jonathon    | Taylor      | Sales Representative            |
+|         177 | Jack        | Livingston  | Sales Representative            |
+|         178 | Kimberely   | Grant       | Sales Representative            |
+|         179 | Charles     | Johnson     | Sales Representative            |
+|         180 | Winston     | Taylor      | Shipping Clerk                  |
+|         181 | Jean        | Fleaur      | Shipping Clerk                  |
+|         182 | Martha      | Sullivan    | Shipping Clerk                  |
+|         183 | Girard      | Geoni       | Shipping Clerk                  |
+|         184 | Nandita     | Sarchand    | Shipping Clerk                  |
+|         185 | Alexis      | Bull        | Shipping Clerk                  |
+|         186 | Julia       | Dellinger   | Shipping Clerk                  |
+|         187 | Anthony     | Cabrio      | Shipping Clerk                  |
+|         188 | Kelly       | Chung       | Shipping Clerk                  |
+|         189 | Jennifer    | Dilly       | Shipping Clerk                  |
+|         190 | Timothy     | Gates       | Shipping Clerk                  |
+|         191 | Randall     | Perkins     | Shipping Clerk                  |
+|         192 | Sarah       | Bell        | Shipping Clerk                  |
+|         193 | Britney     | Everett     | Shipping Clerk                  |
+|         194 | Samuel      | McCain      | Shipping Clerk                  |
+|         195 | Vance       | Jones       | Shipping Clerk                  |
+|         196 | Alana       | Walsh       | Shipping Clerk                  |
+|         197 | Kevin       | Feeney      | Shipping Clerk                  |
+|         198 | Donald      | OConnell    | Shipping Clerk                  |
+|         199 | Douglas     | Grant       | Shipping Clerk                  |
+|         125 | Julia       | Nayer       | Stock Clerk                     |
+|         126 | Irene       | Mikkilineni | Stock Clerk                     |
+|         127 | James       | Landry      | Stock Clerk                     |
+|         128 | Steven      | Markle      | Stock Clerk                     |
+|         129 | Laura       | Bissot      | Stock Clerk                     |
+|         130 | Mozhe       | Atkinson    | Stock Clerk                     |
+|         131 | James       | Marlow      | Stock Clerk                     |
+|         132 | TJ          | Olson       | Stock Clerk                     |
+|         133 | Jason       | Mallin      | Stock Clerk                     |
+|         134 | Michael     | Rogers      | Stock Clerk                     |
+|         135 | Ki          | Gee         | Stock Clerk                     |
+|         136 | Hazel       | Philtanker  | Stock Clerk                     |
+|         137 | Renske      | Ladwig      | Stock Clerk                     |
+|         138 | Stephen     | Stiles      | Stock Clerk                     |
+|         139 | John        | Seo         | Stock Clerk                     |
+|         140 | Joshua      | Patel       | Stock Clerk                     |
+|         141 | Trenna      | Rajs        | Stock Clerk                     |
+|         142 | Curtis      | Davies      | Stock Clerk                     |
+|         143 | Randall     | Matos       | Stock Clerk                     |
+|         144 | Peter       | Vargas      | Stock Clerk                     |
+|         120 | Matthew     | Weiss       | Stock Manager                   |
+|         121 | Adam        | Fripp       | Stock Manager                   |
+|         122 | Payam       | Kaufling    | Stock Manager                   |
+|         123 | Shanta      | Vollman     | Stock Manager                   |
+|         124 | Kevin       | Mourgos     | Stock Manager                   |
++-------------+-------------+-------------+---------------------------------+
+107 rows in set (0.0019 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name, b.min_salary, b.max_salary from employees a inner join jobs b on a.job_id = b.job_id;
++-------------+-------------+-------------+------------+------------+
+| employee_id | first_name  | last_name   | min_salary | max_salary |
++-------------+-------------+-------------+------------+------------+
+|         206 | William     | Gietz       |       4200 |       9000 |
+|         205 | Shelley     | Higgins     |       8200 |      16000 |
+|         200 | Jennifer    | Whalen      |       3000 |       6000 |
+|         100 | Steven      | King        |      20000 |      40000 |
+|         101 | Neena       | Kochhar     |      15000 |      30000 |
+|         102 | Lex         | De Haan     |      15000 |      30000 |
+|         109 | Daniel      | Faviet      |       4200 |       9000 |
+|         110 | John        | Chen        |       4200 |       9000 |
+|         111 | Ismael      | Sciarra     |       4200 |       9000 |
+|         112 | Jose Manuel | Urman       |       4200 |       9000 |
+|         113 | Luis        | Popp        |       4200 |       9000 |
+|         108 | Nancy       | Greenberg   |       8200 |      16000 |
+|         203 | Susan       | Mavris      |       4000 |       9000 |
+|         103 | Alexander   | Hunold      |       4000 |      10000 |
+|         104 | Bruce       | Ernst       |       4000 |      10000 |
+|         105 | David       | Austin      |       4000 |      10000 |
+|         106 | Valli       | Pataballa   |       4000 |      10000 |
+|         107 | Diana       | Lorentz     |       4000 |      10000 |
+|         201 | Michael     | Hartstein   |       9000 |      15000 |
+|         202 | Pat         | Fay         |       4000 |       9000 |
+|         204 | Hermann     | Baer        |       4500 |      10500 |
+|         115 | Alexander   | Khoo        |       2500 |       5500 |
+|         116 | Shelli      | Baida       |       2500 |       5500 |
+|         117 | Sigal       | Tobias      |       2500 |       5500 |
+|         118 | Guy         | Himuro      |       2500 |       5500 |
+|         119 | Karen       | Colmenares  |       2500 |       5500 |
+|         114 | Den         | Raphaely    |       8000 |      15000 |
+|         145 | John        | Russell     |      10000 |      20000 |
+|         146 | Karen       | Partners    |      10000 |      20000 |
+|         147 | Alberto     | Errazuriz   |      10000 |      20000 |
+|         148 | Gerald      | Cambrault   |      10000 |      20000 |
+|         149 | Eleni       | Zlotkey     |      10000 |      20000 |
+|         150 | Peter       | Tucker      |       6000 |      12000 |
+|         151 | David       | Bernstein   |       6000 |      12000 |
+|         152 | Peter       | Hall        |       6000 |      12000 |
+|         153 | Christopher | Olsen       |       6000 |      12000 |
+|         154 | Nanette     | Cambrault   |       6000 |      12000 |
+|         155 | Oliver      | Tuvault     |       6000 |      12000 |
+|         156 | Janette     | King        |       6000 |      12000 |
+|         157 | Patrick     | Sully       |       6000 |      12000 |
+|         158 | Allan       | McEwen      |       6000 |      12000 |
+|         159 | Lindsey     | Smith       |       6000 |      12000 |
+|         160 | Louise      | Doran       |       6000 |      12000 |
+|         161 | Sarath      | Sewall      |       6000 |      12000 |
+|         162 | Clara       | Vishney     |       6000 |      12000 |
+|         163 | Danielle    | Greene      |       6000 |      12000 |
+|         164 | Mattea      | Marvins     |       6000 |      12000 |
+|         165 | David       | Lee         |       6000 |      12000 |
+|         166 | Sundar      | Ande        |       6000 |      12000 |
+|         167 | Amit        | Banda       |       6000 |      12000 |
+|         168 | Lisa        | Ozer        |       6000 |      12000 |
+|         169 | Harrison    | Bloom       |       6000 |      12000 |
+|         170 | Tayler      | Fox         |       6000 |      12000 |
+|         171 | William     | Smith       |       6000 |      12000 |
+|         172 | Elizabeth   | Bates       |       6000 |      12000 |
+|         173 | Sundita     | Kumar       |       6000 |      12000 |
+|         174 | Ellen       | Abel        |       6000 |      12000 |
+|         175 | Alyssa      | Hutton      |       6000 |      12000 |
+|         176 | Jonathon    | Taylor      |       6000 |      12000 |
+|         177 | Jack        | Livingston  |       6000 |      12000 |
+|         178 | Kimberely   | Grant       |       6000 |      12000 |
+|         179 | Charles     | Johnson     |       6000 |      12000 |
+|         180 | Winston     | Taylor      |       2500 |       5500 |
+|         181 | Jean        | Fleaur      |       2500 |       5500 |
+|         182 | Martha      | Sullivan    |       2500 |       5500 |
+|         183 | Girard      | Geoni       |       2500 |       5500 |
+|         184 | Nandita     | Sarchand    |       2500 |       5500 |
+|         185 | Alexis      | Bull        |       2500 |       5500 |
+|         186 | Julia       | Dellinger   |       2500 |       5500 |
+|         187 | Anthony     | Cabrio      |       2500 |       5500 |
+|         188 | Kelly       | Chung       |       2500 |       5500 |
+|         189 | Jennifer    | Dilly       |       2500 |       5500 |
+|         190 | Timothy     | Gates       |       2500 |       5500 |
+|         191 | Randall     | Perkins     |       2500 |       5500 |
+|         192 | Sarah       | Bell        |       2500 |       5500 |
+|         193 | Britney     | Everett     |       2500 |       5500 |
+|         194 | Samuel      | McCain      |       2500 |       5500 |
+|         195 | Vance       | Jones       |       2500 |       5500 |
+|         196 | Alana       | Walsh       |       2500 |       5500 |
+|         197 | Kevin       | Feeney      |       2500 |       5500 |
+|         198 | Donald      | OConnell    |       2500 |       5500 |
+|         199 | Douglas     | Grant       |       2500 |       5500 |
+|         125 | Julia       | Nayer       |       2000 |       5000 |
+|         126 | Irene       | Mikkilineni |       2000 |       5000 |
+|         127 | James       | Landry      |       2000 |       5000 |
+|         128 | Steven      | Markle      |       2000 |       5000 |
+|         129 | Laura       | Bissot      |       2000 |       5000 |
+|         130 | Mozhe       | Atkinson    |       2000 |       5000 |
+|         131 | James       | Marlow      |       2000 |       5000 |
+|         132 | TJ          | Olson       |       2000 |       5000 |
+|         133 | Jason       | Mallin      |       2000 |       5000 |
+|         134 | Michael     | Rogers      |       2000 |       5000 |
+|         135 | Ki          | Gee         |       2000 |       5000 |
+|         136 | Hazel       | Philtanker  |       2000 |       5000 |
+|         137 | Renske      | Ladwig      |       2000 |       5000 |
+|         138 | Stephen     | Stiles      |       2000 |       5000 |
+|         139 | John        | Seo         |       2000 |       5000 |
+|         140 | Joshua      | Patel       |       2000 |       5000 |
+|         141 | Trenna      | Rajs        |       2000 |       5000 |
+|         142 | Curtis      | Davies      |       2000 |       5000 |
+|         143 | Randall     | Matos       |       2000 |       5000 |
+|         144 | Peter       | Vargas      |       2000 |       5000 |
+|         120 | Matthew     | Weiss       |       5500 |       8500 |
+|         121 | Adam        | Fripp       |       5500 |       8500 |
+|         122 | Payam       | Kaufling    |       5500 |       8500 |
+|         123 | Shanta      | Vollman     |       5500 |       8500 |
+|         124 | Kevin       | Mourgos     |       5500 |       8500 |
++-------------+-------------+-------------+------------+------------+
+107 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments:
+                                      -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':' at line 1
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name, b.department_name from employees a inner join departments b on a.manager_id = b.manager_id;
++-------------+-------------+------------+----------------------+
+| employee_id | first_name  | last_name  | department_name      |
++-------------+-------------+------------+----------------------+
+|         202 | Pat         | Fay        | Marketing            |
+|         115 | Alexander   | Khoo       | Purchasing           |
+|         116 | Shelli      | Baida      | Purchasing           |
+|         117 | Sigal       | Tobias     | Purchasing           |
+|         118 | Guy         | Himuro     | Purchasing           |
+|         119 | Karen       | Colmenares | Purchasing           |
+|         129 | Laura       | Bissot     | Shipping             |
+|         130 | Mozhe       | Atkinson   | Shipping             |
+|         131 | James       | Marlow     | Shipping             |
+|         132 | TJ          | Olson      | Shipping             |
+|         184 | Nandita     | Sarchand   | Shipping             |
+|         185 | Alexis      | Bull       | Shipping             |
+|         186 | Julia       | Dellinger  | Shipping             |
+|         187 | Anthony     | Cabrio     | Shipping             |
+|         104 | Bruce       | Ernst      | IT                   |
+|         105 | David       | Austin     | IT                   |
+|         106 | Valli       | Pataballa  | IT                   |
+|         107 | Diana       | Lorentz    | IT                   |
+|         150 | Peter       | Tucker     | Sales                |
+|         151 | David       | Bernstein  | Sales                |
+|         152 | Peter       | Hall       | Sales                |
+|         153 | Christopher | Olsen      | Sales                |
+|         154 | Nanette     | Cambrault  | Sales                |
+|         155 | Oliver      | Tuvault    | Sales                |
+|         101 | Neena       | Kochhar    | Executive            |
+|         102 | Lex         | De Haan    | Executive            |
+|         114 | Den         | Raphaely   | Executive            |
+|         120 | Matthew     | Weiss      | Executive            |
+|         121 | Adam        | Fripp      | Executive            |
+|         122 | Payam       | Kaufling   | Executive            |
+|         123 | Shanta      | Vollman    | Executive            |
+|         124 | Kevin       | Mourgos    | Executive            |
+|         145 | John        | Russell    | Executive            |
+|         146 | Karen       | Partners   | Executive            |
+|         147 | Alberto     | Errazuriz  | Executive            |
+|         148 | Gerald      | Cambrault  | Executive            |
+|         149 | Eleni       | Zlotkey    | Executive            |
+|         201 | Michael     | Hartstein  | Executive            |
+|         109 | Daniel      | Faviet     | Finance              |
+|         110 | John        | Chen       | Finance              |
+|         111 | Ismael      | Sciarra    | Finance              |
+|         112 | Jose Manuel | Urman      | Finance              |
+|         113 | Luis        | Popp       | Finance              |
+|         206 | William     | Gietz      | Accounting           |
+|         100 | Steven      | King       | Treasury             |
+|         100 | Steven      | King       | Corporate Tax        |
+|         100 | Steven      | King       | Control And Credit   |
+|         100 | Steven      | King       | Shareholder Services |
+|         100 | Steven      | King       | Benefits             |
+|         100 | Steven      | King       | Manufacturing        |
+|         100 | Steven      | King       | Construction         |
+|         100 | Steven      | King       | Contracting          |
+|         100 | Steven      | King       | Operations           |
+|         100 | Steven      | King       | IT Support           |
+|         100 | Steven      | King       | NOC                  |
+|         100 | Steven      | King       | IT Helpdesk          |
+|         100 | Steven      | King       | Government Sales     |
+|         100 | Steven      | King       | Retail Sales         |
+|         100 | Steven      | King       | Recruiting           |
+|         100 | Steven      | King       | Payroll              |
++-------------+-------------+------------+----------------------+
+60 rows in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name, b.department_name from employees a inner join departments b on a.department_id = b.department_id;
++-------------+-------------+-------------+------------------+
+| employee_id | first_name  | last_name   | department_name  |
++-------------+-------------+-------------+------------------+
+|         200 | Jennifer    | Whalen      | Administration   |
+|         201 | Michael     | Hartstein   | Marketing        |
+|         202 | Pat         | Fay         | Marketing        |
+|         114 | Den         | Raphaely    | Purchasing       |
+|         115 | Alexander   | Khoo        | Purchasing       |
+|         116 | Shelli      | Baida       | Purchasing       |
+|         117 | Sigal       | Tobias      | Purchasing       |
+|         118 | Guy         | Himuro      | Purchasing       |
+|         119 | Karen       | Colmenares  | Purchasing       |
+|         203 | Susan       | Mavris      | Human Resources  |
+|         120 | Matthew     | Weiss       | Shipping         |
+|         121 | Adam        | Fripp       | Shipping         |
+|         122 | Payam       | Kaufling    | Shipping         |
+|         123 | Shanta      | Vollman     | Shipping         |
+|         124 | Kevin       | Mourgos     | Shipping         |
+|         125 | Julia       | Nayer       | Shipping         |
+|         126 | Irene       | Mikkilineni | Shipping         |
+|         127 | James       | Landry      | Shipping         |
+|         128 | Steven      | Markle      | Shipping         |
+|         129 | Laura       | Bissot      | Shipping         |
+|         130 | Mozhe       | Atkinson    | Shipping         |
+|         131 | James       | Marlow      | Shipping         |
+|         132 | TJ          | Olson       | Shipping         |
+|         133 | Jason       | Mallin      | Shipping         |
+|         134 | Michael     | Rogers      | Shipping         |
+|         135 | Ki          | Gee         | Shipping         |
+|         136 | Hazel       | Philtanker  | Shipping         |
+|         137 | Renske      | Ladwig      | Shipping         |
+|         138 | Stephen     | Stiles      | Shipping         |
+|         139 | John        | Seo         | Shipping         |
+|         140 | Joshua      | Patel       | Shipping         |
+|         141 | Trenna      | Rajs        | Shipping         |
+|         142 | Curtis      | Davies      | Shipping         |
+|         143 | Randall     | Matos       | Shipping         |
+|         144 | Peter       | Vargas      | Shipping         |
+|         180 | Winston     | Taylor      | Shipping         |
+|         181 | Jean        | Fleaur      | Shipping         |
+|         182 | Martha      | Sullivan    | Shipping         |
+|         183 | Girard      | Geoni       | Shipping         |
+|         184 | Nandita     | Sarchand    | Shipping         |
+|         185 | Alexis      | Bull        | Shipping         |
+|         186 | Julia       | Dellinger   | Shipping         |
+|         187 | Anthony     | Cabrio      | Shipping         |
+|         188 | Kelly       | Chung       | Shipping         |
+|         189 | Jennifer    | Dilly       | Shipping         |
+|         190 | Timothy     | Gates       | Shipping         |
+|         191 | Randall     | Perkins     | Shipping         |
+|         192 | Sarah       | Bell        | Shipping         |
+|         193 | Britney     | Everett     | Shipping         |
+|         194 | Samuel      | McCain      | Shipping         |
+|         195 | Vance       | Jones       | Shipping         |
+|         196 | Alana       | Walsh       | Shipping         |
+|         197 | Kevin       | Feeney      | Shipping         |
+|         198 | Donald      | OConnell    | Shipping         |
+|         199 | Douglas     | Grant       | Shipping         |
+|         103 | Alexander   | Hunold      | IT               |
+|         104 | Bruce       | Ernst       | IT               |
+|         105 | David       | Austin      | IT               |
+|         106 | Valli       | Pataballa   | IT               |
+|         107 | Diana       | Lorentz     | IT               |
+|         204 | Hermann     | Baer        | Public Relations |
+|         145 | John        | Russell     | Sales            |
+|         146 | Karen       | Partners    | Sales            |
+|         147 | Alberto     | Errazuriz   | Sales            |
+|         148 | Gerald      | Cambrault   | Sales            |
+|         149 | Eleni       | Zlotkey     | Sales            |
+|         150 | Peter       | Tucker      | Sales            |
+|         151 | David       | Bernstein   | Sales            |
+|         152 | Peter       | Hall        | Sales            |
+|         153 | Christopher | Olsen       | Sales            |
+|         154 | Nanette     | Cambrault   | Sales            |
+|         155 | Oliver      | Tuvault     | Sales            |
+|         156 | Janette     | King        | Sales            |
+|         157 | Patrick     | Sully       | Sales            |
+|         158 | Allan       | McEwen      | Sales            |
+|         159 | Lindsey     | Smith       | Sales            |
+|         160 | Louise      | Doran       | Sales            |
+|         161 | Sarath      | Sewall      | Sales            |
+|         162 | Clara       | Vishney     | Sales            |
+|         163 | Danielle    | Greene      | Sales            |
+|         164 | Mattea      | Marvins     | Sales            |
+|         165 | David       | Lee         | Sales            |
+|         166 | Sundar      | Ande        | Sales            |
+|         167 | Amit        | Banda       | Sales            |
+|         168 | Lisa        | Ozer        | Sales            |
+|         169 | Harrison    | Bloom       | Sales            |
+|         170 | Tayler      | Fox         | Sales            |
+|         171 | William     | Smith       | Sales            |
+|         172 | Elizabeth   | Bates       | Sales            |
+|         173 | Sundita     | Kumar       | Sales            |
+|         174 | Ellen       | Abel        | Sales            |
+|         175 | Alyssa      | Hutton      | Sales            |
+|         176 | Jonathon    | Taylor      | Sales            |
+|         177 | Jack        | Livingston  | Sales            |
+|         179 | Charles     | Johnson     | Sales            |
+|         100 | Steven      | King        | Executive        |
+|         101 | Neena       | Kochhar     | Executive        |
+|         102 | Lex         | De Haan     | Executive        |
+|         108 | Nancy       | Greenberg   | Finance          |
+|         109 | Daniel      | Faviet      | Finance          |
+|         110 | John        | Chen        | Finance          |
+|         111 | Ismael      | Sciarra     | Finance          |
+|         112 | Jose Manuel | Urman       | Finance          |
+|         113 | Luis        | Popp        | Finance          |
+|         205 | Shelley     | Higgins     | Accounting       |
+|         206 | William     | Gietz       | Accounting       |
++-------------+-------------+-------------+------------------+
+106 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > show tables;
++-----------------+
+| Tables_in_comp2 |
++-----------------+
+| countries       |
+| departments     |
+| employees       |
+| job_history     |
+| jobs            |
+| locations       |
+| regions         |
++-----------------+
+7 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desct employees;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desct employees' at line 1
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | decimal(6,0) | NO   | PRI | 0       |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(25)  | NO   | MUL | NULL    |       |
+| EMAIL          | varchar(25)  | NO   | UNI | NULL    |       |
+| PHONE_NUMBER   | varchar(20)  | YES  |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   | MUL | NULL    |       |
+| SALARY         | decimal(8,2) | YES  |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | NULL    |       |
+| MANAGER_ID     | decimal(6,0) | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.department_name, b.first_name, b.last_name
+                                      -> from departments a inner join employees b
+                                      -> on a.manager_id = b.manager_id;
++----------------------+-------------+------------+
+| department_name      | first_name  | last_name  |
++----------------------+-------------+------------+
+| Marketing            | Pat         | Fay        |
+| Purchasing           | Alexander   | Khoo       |
+| Purchasing           | Shelli      | Baida      |
+| Purchasing           | Sigal       | Tobias     |
+| Purchasing           | Guy         | Himuro     |
+| Purchasing           | Karen       | Colmenares |
+| Shipping             | Laura       | Bissot     |
+| Shipping             | Mozhe       | Atkinson   |
+| Shipping             | James       | Marlow     |
+| Shipping             | TJ          | Olson      |
+| Shipping             | Nandita     | Sarchand   |
+| Shipping             | Alexis      | Bull       |
+| Shipping             | Julia       | Dellinger  |
+| Shipping             | Anthony     | Cabrio     |
+| IT                   | Bruce       | Ernst      |
+| IT                   | David       | Austin     |
+| IT                   | Valli       | Pataballa  |
+| IT                   | Diana       | Lorentz    |
+| Sales                | Peter       | Tucker     |
+| Sales                | David       | Bernstein  |
+| Sales                | Peter       | Hall       |
+| Sales                | Christopher | Olsen      |
+| Sales                | Nanette     | Cambrault  |
+| Sales                | Oliver      | Tuvault    |
+| Executive            | Neena       | Kochhar    |
+| Executive            | Lex         | De Haan    |
+| Executive            | Den         | Raphaely   |
+| Executive            | Matthew     | Weiss      |
+| Executive            | Adam        | Fripp      |
+| Executive            | Payam       | Kaufling   |
+| Executive            | Shanta      | Vollman    |
+| Executive            | Kevin       | Mourgos    |
+| Executive            | John        | Russell    |
+| Executive            | Karen       | Partners   |
+| Executive            | Alberto     | Errazuriz  |
+| Executive            | Gerald      | Cambrault  |
+| Executive            | Eleni       | Zlotkey    |
+| Executive            | Michael     | Hartstein  |
+| Finance              | Daniel      | Faviet     |
+| Finance              | John        | Chen       |
+| Finance              | Ismael      | Sciarra    |
+| Finance              | Jose Manuel | Urman      |
+| Finance              | Luis        | Popp       |
+| Accounting           | William     | Gietz      |
+| Treasury             | Steven      | King       |
+| Corporate Tax        | Steven      | King       |
+| Control And Credit   | Steven      | King       |
+| Shareholder Services | Steven      | King       |
+| Benefits             | Steven      | King       |
+| Manufacturing        | Steven      | King       |
+| Construction         | Steven      | King       |
+| Contracting          | Steven      | King       |
+| Operations           | Steven      | King       |
+| IT Support           | Steven      | King       |
+| NOC                  | Steven      | King       |
+| IT Helpdesk          | Steven      | King       |
+| Government Sales     | Steven      | King       |
+| Retail Sales         | Steven      | King       |
+| Recruiting           | Steven      | King       |
+| Payroll              | Steven      | King       |
++----------------------+-------------+------------+
+60 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desct departments;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desct departments' at line 1
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > show tables;
++-----------------+
+| Tables_in_comp2 |
++-----------------+
+| countries       |
+| departments     |
+| employees       |
+| job_history     |
+| jobs            |
+| locations       |
+| regions         |
++-----------------+
+7 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc locations;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| LOCATION_ID    | decimal(4,0) | NO   | PRI | 0       |       |
+| STREET_ADDRESS | varchar(40)  | YES  |     | NULL    |       |
+| POSTAL_CODE    | varchar(12)  | YES  |     | NULL    |       |
+| CITY           | varchar(30)  | NO   | MUL | NULL    |       |
+| STATE_PROVINCE | varchar(25)  | YES  | MUL | NULL    |       |
+| COUNTRY_ID     | varchar(2)   | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+6 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc countries;
++--------------+---------------+------+-----+---------+-------+
+| Field        | Type          | Null | Key | Default | Extra |
++--------------+---------------+------+-----+---------+-------+
+| COUNTRY_ID   | varchar(2)    | NO   | PRI | NULL    |       |
+| COUNTRY_NAME | varchar(40)   | YES  |     | NULL    |       |
+| REGION_ID    | decimal(10,0) | YES  | MUL | NULL    |       |
++--------------+---------------+------+-----+---------+-------+
+3 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.department_name, b.street_address, b.city,
+                                      -> b.state_province, c.country_name
+                                      -> from departments a inner join locations b
+                                      -> on a.location_id = b.location_id inner join
+                                      -> countries c on b.country_id = c.country_id;
++----------------------+-----------------------+---------------------+----------------+--------------------------+
+| department_name      | street_address        | city                | state_province | country_name             |
++----------------------+-----------------------+---------------------+----------------+--------------------------+
+| Administration       | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Marketing            | 147 Spadina Ave       | Toronto             | Ontario        | Canada                   |
+| Purchasing           | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Human Resources      | 8204 Arthur St        | London              |                | United Kingdom           |
+| Shipping             | 2011 Interiors Blvd   | South San Francisco | California     | United States of America |
+| IT                   | 2014 Jabberwocky Rd   | Southlake           | Texas          | United States of America |
+| Public Relations     | Schwanthalerstr. 7031 | Munich              | Bavaria        | Germany                  |
+| Executive            | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Finance              | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Accounting           | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Treasury             | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Corporate Tax        | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Control And Credit   | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Shareholder Services | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Benefits             | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Manufacturing        | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Construction         | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Contracting          | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Operations           | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| IT Support           | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| NOC                  | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| IT Helpdesk          | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Government Sales     | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Retail Sales         | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Recruiting           | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
+| Payroll              | 2004 Charade Rd       | Seattle             | Washington     | United States of America |
++----------------------+-----------------------+---------------------+----------------+--------------------------+
+26 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employee;
+ERROR: 1146 (42S02): Table 'comp2.employee' doesn't exist
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | decimal(6,0) | NO   | PRI | 0       |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(25)  | NO   | MUL | NULL    |       |
+| EMAIL          | varchar(25)  | NO   | UNI | NULL    |       |
+| PHONE_NUMBER   | varchar(20)  | YES  |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   | MUL | NULL    |       |
+| SALARY         | decimal(8,2) | YES  |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | NULL    |       |
+| MANAGER_ID     | decimal(6,0) | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.department_name, b.first_name, b.last_name from departments a inner join employees b on a.manager_id = b.employee_id;
++------------------+------------+-----------+
+| department_name  | first_name | last_name |
++------------------+------------+-----------+
+| Administration   | Jennifer   | Whalen    |
+| Marketing        | Michael    | Hartstein |
+| Purchasing       | Den        | Raphaely  |
+| Human Resources  | Susan      | Mavris    |
+| Shipping         | Adam       | Fripp     |
+| IT               | Alexander  | Hunold    |
+| Public Relations | Hermann    | Baer      |
+| Sales            | John       | Russell   |
+| Executive        | Steven     | King      |
+| Finance          | Nancy      | Greenberg |
+| Accounting       | Shelley    | Higgins   |
++------------------+------------+-----------+
+11 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name,
+                                      -> b.first_name, b.last_name from employees a inner join
+                                      -> employees b on a.employee_id = b_manager_id;
+ERROR: 1054 (42S22): Unknown column 'b_manager_id' in 'on clause'
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name, b.first_name, b.last_name from employees a inner join employees b on a.employee_id = b.manager_id;
++-------------+------------+-----------+-------------+-------------+
+| employee_id | first_name | last_name | first_name  | last_name   |
++-------------+------------+-----------+-------------+-------------+
+|         100 | Steven     | King      | Neena       | Kochhar     |
+|         100 | Steven     | King      | Lex         | De Haan     |
+|         102 | Lex        | De Haan   | Alexander   | Hunold      |
+|         103 | Alexander  | Hunold    | Bruce       | Ernst       |
+|         103 | Alexander  | Hunold    | David       | Austin      |
+|         103 | Alexander  | Hunold    | Valli       | Pataballa   |
+|         103 | Alexander  | Hunold    | Diana       | Lorentz     |
+|         101 | Neena      | Kochhar   | Nancy       | Greenberg   |
+|         108 | Nancy      | Greenberg | Daniel      | Faviet      |
+|         108 | Nancy      | Greenberg | John        | Chen        |
+|         108 | Nancy      | Greenberg | Ismael      | Sciarra     |
+|         108 | Nancy      | Greenberg | Jose Manuel | Urman       |
+|         108 | Nancy      | Greenberg | Luis        | Popp        |
+|         100 | Steven     | King      | Den         | Raphaely    |
+|         114 | Den        | Raphaely  | Alexander   | Khoo        |
+|         114 | Den        | Raphaely  | Shelli      | Baida       |
+|         114 | Den        | Raphaely  | Sigal       | Tobias      |
+|         114 | Den        | Raphaely  | Guy         | Himuro      |
+|         114 | Den        | Raphaely  | Karen       | Colmenares  |
+|         100 | Steven     | King      | Matthew     | Weiss       |
+|         100 | Steven     | King      | Adam        | Fripp       |
+|         100 | Steven     | King      | Payam       | Kaufling    |
+|         100 | Steven     | King      | Shanta      | Vollman     |
+|         100 | Steven     | King      | Kevin       | Mourgos     |
+|         120 | Matthew    | Weiss     | Julia       | Nayer       |
+|         120 | Matthew    | Weiss     | Irene       | Mikkilineni |
+|         120 | Matthew    | Weiss     | James       | Landry      |
+|         120 | Matthew    | Weiss     | Steven      | Markle      |
+|         121 | Adam       | Fripp     | Laura       | Bissot      |
+|         121 | Adam       | Fripp     | Mozhe       | Atkinson    |
+|         121 | Adam       | Fripp     | James       | Marlow      |
+|         121 | Adam       | Fripp     | TJ          | Olson       |
+|         122 | Payam      | Kaufling  | Jason       | Mallin      |
+|         122 | Payam      | Kaufling  | Michael     | Rogers      |
+|         122 | Payam      | Kaufling  | Ki          | Gee         |
+|         122 | Payam      | Kaufling  | Hazel       | Philtanker  |
+|         123 | Shanta     | Vollman   | Renske      | Ladwig      |
+|         123 | Shanta     | Vollman   | Stephen     | Stiles      |
+|         123 | Shanta     | Vollman   | John        | Seo         |
+|         123 | Shanta     | Vollman   | Joshua      | Patel       |
+|         124 | Kevin      | Mourgos   | Trenna      | Rajs        |
+|         124 | Kevin      | Mourgos   | Curtis      | Davies      |
+|         124 | Kevin      | Mourgos   | Randall     | Matos       |
+|         124 | Kevin      | Mourgos   | Peter       | Vargas      |
+|         100 | Steven     | King      | John        | Russell     |
+|         100 | Steven     | King      | Karen       | Partners    |
+|         100 | Steven     | King      | Alberto     | Errazuriz   |
+|         100 | Steven     | King      | Gerald      | Cambrault   |
+|         100 | Steven     | King      | Eleni       | Zlotkey     |
+|         145 | John       | Russell   | Peter       | Tucker      |
+|         145 | John       | Russell   | David       | Bernstein   |
+|         145 | John       | Russell   | Peter       | Hall        |
+|         145 | John       | Russell   | Christopher | Olsen       |
+|         145 | John       | Russell   | Nanette     | Cambrault   |
+|         145 | John       | Russell   | Oliver      | Tuvault     |
+|         146 | Karen      | Partners  | Janette     | King        |
+|         146 | Karen      | Partners  | Patrick     | Sully       |
+|         146 | Karen      | Partners  | Allan       | McEwen      |
+|         146 | Karen      | Partners  | Lindsey     | Smith       |
+|         146 | Karen      | Partners  | Louise      | Doran       |
+|         146 | Karen      | Partners  | Sarath      | Sewall      |
+|         147 | Alberto    | Errazuriz | Clara       | Vishney     |
+|         147 | Alberto    | Errazuriz | Danielle    | Greene      |
+|         147 | Alberto    | Errazuriz | Mattea      | Marvins     |
+|         147 | Alberto    | Errazuriz | David       | Lee         |
+|         147 | Alberto    | Errazuriz | Sundar      | Ande        |
+|         147 | Alberto    | Errazuriz | Amit        | Banda       |
+|         148 | Gerald     | Cambrault | Lisa        | Ozer        |
+|         148 | Gerald     | Cambrault | Harrison    | Bloom       |
+|         148 | Gerald     | Cambrault | Tayler      | Fox         |
+|         148 | Gerald     | Cambrault | William     | Smith       |
+|         148 | Gerald     | Cambrault | Elizabeth   | Bates       |
+|         148 | Gerald     | Cambrault | Sundita     | Kumar       |
+|         149 | Eleni      | Zlotkey   | Ellen       | Abel        |
+|         149 | Eleni      | Zlotkey   | Alyssa      | Hutton      |
+|         149 | Eleni      | Zlotkey   | Jonathon    | Taylor      |
+|         149 | Eleni      | Zlotkey   | Jack        | Livingston  |
+|         149 | Eleni      | Zlotkey   | Kimberely   | Grant       |
+|         149 | Eleni      | Zlotkey   | Charles     | Johnson     |
+|         120 | Matthew    | Weiss     | Winston     | Taylor      |
+|         120 | Matthew    | Weiss     | Jean        | Fleaur      |
+|         120 | Matthew    | Weiss     | Martha      | Sullivan    |
+|         120 | Matthew    | Weiss     | Girard      | Geoni       |
+|         121 | Adam       | Fripp     | Nandita     | Sarchand    |
+|         121 | Adam       | Fripp     | Alexis      | Bull        |
+|         121 | Adam       | Fripp     | Julia       | Dellinger   |
+|         121 | Adam       | Fripp     | Anthony     | Cabrio      |
+|         122 | Payam      | Kaufling  | Kelly       | Chung       |
+|         122 | Payam      | Kaufling  | Jennifer    | Dilly       |
+|         122 | Payam      | Kaufling  | Timothy     | Gates       |
+|         122 | Payam      | Kaufling  | Randall     | Perkins     |
+|         123 | Shanta     | Vollman   | Sarah       | Bell        |
+|         123 | Shanta     | Vollman   | Britney     | Everett     |
+|         123 | Shanta     | Vollman   | Samuel      | McCain      |
+|         123 | Shanta     | Vollman   | Vance       | Jones       |
+|         124 | Kevin      | Mourgos   | Alana       | Walsh       |
+|         124 | Kevin      | Mourgos   | Kevin       | Feeney      |
+|         124 | Kevin      | Mourgos   | Donald      | OConnell    |
+|         124 | Kevin      | Mourgos   | Douglas     | Grant       |
+|         101 | Neena      | Kochhar   | Jennifer    | Whalen      |
+|         100 | Steven     | King      | Michael     | Hartstein   |
+|         201 | Michael    | Hartstein | Pat         | Fay         |
+|         101 | Neena      | Kochhar   | Susan       | Mavris      |
+|         101 | Neena      | Kochhar   | Hermann     | Baer        |
+|         101 | Neena      | Kochhar   | Shelley     | Higgins     |
+|         205 | Shelley    | Higgins   | William     | Gietz       |
++-------------+------------+-----------+-------------+-------------+
+106 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name, b.first_name, b.last_name from employees a inner join employees b on a.manager_id = b.employee_id;
++-------------+-------------+-------------+------------+-----------+
+| employee_id | first_name  | last_name   | first_name | last_name |
++-------------+-------------+-------------+------------+-----------+
+|         101 | Neena       | Kochhar     | Steven     | King      |
+|         102 | Lex         | De Haan     | Steven     | King      |
+|         103 | Alexander   | Hunold      | Lex        | De Haan   |
+|         104 | Bruce       | Ernst       | Alexander  | Hunold    |
+|         105 | David       | Austin      | Alexander  | Hunold    |
+|         106 | Valli       | Pataballa   | Alexander  | Hunold    |
+|         107 | Diana       | Lorentz     | Alexander  | Hunold    |
+|         108 | Nancy       | Greenberg   | Neena      | Kochhar   |
+|         109 | Daniel      | Faviet      | Nancy      | Greenberg |
+|         110 | John        | Chen        | Nancy      | Greenberg |
+|         111 | Ismael      | Sciarra     | Nancy      | Greenberg |
+|         112 | Jose Manuel | Urman       | Nancy      | Greenberg |
+|         113 | Luis        | Popp        | Nancy      | Greenberg |
+|         114 | Den         | Raphaely    | Steven     | King      |
+|         115 | Alexander   | Khoo        | Den        | Raphaely  |
+|         116 | Shelli      | Baida       | Den        | Raphaely  |
+|         117 | Sigal       | Tobias      | Den        | Raphaely  |
+|         118 | Guy         | Himuro      | Den        | Raphaely  |
+|         119 | Karen       | Colmenares  | Den        | Raphaely  |
+|         120 | Matthew     | Weiss       | Steven     | King      |
+|         121 | Adam        | Fripp       | Steven     | King      |
+|         122 | Payam       | Kaufling    | Steven     | King      |
+|         123 | Shanta      | Vollman     | Steven     | King      |
+|         124 | Kevin       | Mourgos     | Steven     | King      |
+|         125 | Julia       | Nayer       | Matthew    | Weiss     |
+|         126 | Irene       | Mikkilineni | Matthew    | Weiss     |
+|         127 | James       | Landry      | Matthew    | Weiss     |
+|         128 | Steven      | Markle      | Matthew    | Weiss     |
+|         129 | Laura       | Bissot      | Adam       | Fripp     |
+|         130 | Mozhe       | Atkinson    | Adam       | Fripp     |
+|         131 | James       | Marlow      | Adam       | Fripp     |
+|         132 | TJ          | Olson       | Adam       | Fripp     |
+|         133 | Jason       | Mallin      | Payam      | Kaufling  |
+|         134 | Michael     | Rogers      | Payam      | Kaufling  |
+|         135 | Ki          | Gee         | Payam      | Kaufling  |
+|         136 | Hazel       | Philtanker  | Payam      | Kaufling  |
+|         137 | Renske      | Ladwig      | Shanta     | Vollman   |
+|         138 | Stephen     | Stiles      | Shanta     | Vollman   |
+|         139 | John        | Seo         | Shanta     | Vollman   |
+|         140 | Joshua      | Patel       | Shanta     | Vollman   |
+|         141 | Trenna      | Rajs        | Kevin      | Mourgos   |
+|         142 | Curtis      | Davies      | Kevin      | Mourgos   |
+|         143 | Randall     | Matos       | Kevin      | Mourgos   |
+|         144 | Peter       | Vargas      | Kevin      | Mourgos   |
+|         145 | John        | Russell     | Steven     | King      |
+|         146 | Karen       | Partners    | Steven     | King      |
+|         147 | Alberto     | Errazuriz   | Steven     | King      |
+|         148 | Gerald      | Cambrault   | Steven     | King      |
+|         149 | Eleni       | Zlotkey     | Steven     | King      |
+|         150 | Peter       | Tucker      | John       | Russell   |
+|         151 | David       | Bernstein   | John       | Russell   |
+|         152 | Peter       | Hall        | John       | Russell   |
+|         153 | Christopher | Olsen       | John       | Russell   |
+|         154 | Nanette     | Cambrault   | John       | Russell   |
+|         155 | Oliver      | Tuvault     | John       | Russell   |
+|         156 | Janette     | King        | Karen      | Partners  |
+|         157 | Patrick     | Sully       | Karen      | Partners  |
+|         158 | Allan       | McEwen      | Karen      | Partners  |
+|         159 | Lindsey     | Smith       | Karen      | Partners  |
+|         160 | Louise      | Doran       | Karen      | Partners  |
+|         161 | Sarath      | Sewall      | Karen      | Partners  |
+|         162 | Clara       | Vishney     | Alberto    | Errazuriz |
+|         163 | Danielle    | Greene      | Alberto    | Errazuriz |
+|         164 | Mattea      | Marvins     | Alberto    | Errazuriz |
+|         165 | David       | Lee         | Alberto    | Errazuriz |
+|         166 | Sundar      | Ande        | Alberto    | Errazuriz |
+|         167 | Amit        | Banda       | Alberto    | Errazuriz |
+|         168 | Lisa        | Ozer        | Gerald     | Cambrault |
+|         169 | Harrison    | Bloom       | Gerald     | Cambrault |
+|         170 | Tayler      | Fox         | Gerald     | Cambrault |
+|         171 | William     | Smith       | Gerald     | Cambrault |
+|         172 | Elizabeth   | Bates       | Gerald     | Cambrault |
+|         173 | Sundita     | Kumar       | Gerald     | Cambrault |
+|         174 | Ellen       | Abel        | Eleni      | Zlotkey   |
+|         175 | Alyssa      | Hutton      | Eleni      | Zlotkey   |
+|         176 | Jonathon    | Taylor      | Eleni      | Zlotkey   |
+|         177 | Jack        | Livingston  | Eleni      | Zlotkey   |
+|         178 | Kimberely   | Grant       | Eleni      | Zlotkey   |
+|         179 | Charles     | Johnson     | Eleni      | Zlotkey   |
+|         180 | Winston     | Taylor      | Matthew    | Weiss     |
+|         181 | Jean        | Fleaur      | Matthew    | Weiss     |
+|         182 | Martha      | Sullivan    | Matthew    | Weiss     |
+|         183 | Girard      | Geoni       | Matthew    | Weiss     |
+|         184 | Nandita     | Sarchand    | Adam       | Fripp     |
+|         185 | Alexis      | Bull        | Adam       | Fripp     |
+|         186 | Julia       | Dellinger   | Adam       | Fripp     |
+|         187 | Anthony     | Cabrio      | Adam       | Fripp     |
+|         188 | Kelly       | Chung       | Payam      | Kaufling  |
+|         189 | Jennifer    | Dilly       | Payam      | Kaufling  |
+|         190 | Timothy     | Gates       | Payam      | Kaufling  |
+|         191 | Randall     | Perkins     | Payam      | Kaufling  |
+|         192 | Sarah       | Bell        | Shanta     | Vollman   |
+|         193 | Britney     | Everett     | Shanta     | Vollman   |
+|         194 | Samuel      | McCain      | Shanta     | Vollman   |
+|         195 | Vance       | Jones       | Shanta     | Vollman   |
+|         196 | Alana       | Walsh       | Kevin      | Mourgos   |
+|         197 | Kevin       | Feeney      | Kevin      | Mourgos   |
+|         198 | Donald      | OConnell    | Kevin      | Mourgos   |
+|         199 | Douglas     | Grant       | Kevin      | Mourgos   |
+|         200 | Jennifer    | Whalen      | Neena      | Kochhar   |
+|         201 | Michael     | Hartstein   | Steven     | King      |
+|         202 | Pat         | Fay         | Michael    | Hartstein |
+|         203 | Susan       | Mavris      | Neena      | Kochhar   |
+|         204 | Hermann     | Baer        | Neena      | Kochhar   |
+|         205 | Shelley     | Higgins     | Neena      | Kochhar   |
+|         206 | William     | Gietz       | Shelley    | Higgins   |
++-------------+-------------+-------------+------------+-----------+
+106 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner join employees b on a.employee_id = b.manager_id;
++------------+-----------+-------------+-------------+-------------+
+| first_name | last_name | employee_id | first_name  | last_name   |
++------------+-----------+-------------+-------------+-------------+
+| Steven     | King      |         101 | Neena       | Kochhar     |
+| Steven     | King      |         102 | Lex         | De Haan     |
+| Lex        | De Haan   |         103 | Alexander   | Hunold      |
+| Alexander  | Hunold    |         104 | Bruce       | Ernst       |
+| Alexander  | Hunold    |         105 | David       | Austin      |
+| Alexander  | Hunold    |         106 | Valli       | Pataballa   |
+| Alexander  | Hunold    |         107 | Diana       | Lorentz     |
+| Neena      | Kochhar   |         108 | Nancy       | Greenberg   |
+| Nancy      | Greenberg |         109 | Daniel      | Faviet      |
+| Nancy      | Greenberg |         110 | John        | Chen        |
+| Nancy      | Greenberg |         111 | Ismael      | Sciarra     |
+| Nancy      | Greenberg |         112 | Jose Manuel | Urman       |
+| Nancy      | Greenberg |         113 | Luis        | Popp        |
+| Steven     | King      |         114 | Den         | Raphaely    |
+| Den        | Raphaely  |         115 | Alexander   | Khoo        |
+| Den        | Raphaely  |         116 | Shelli      | Baida       |
+| Den        | Raphaely  |         117 | Sigal       | Tobias      |
+| Den        | Raphaely  |         118 | Guy         | Himuro      |
+| Den        | Raphaely  |         119 | Karen       | Colmenares  |
+| Steven     | King      |         120 | Matthew     | Weiss       |
+| Steven     | King      |         121 | Adam        | Fripp       |
+| Steven     | King      |         122 | Payam       | Kaufling    |
+| Steven     | King      |         123 | Shanta      | Vollman     |
+| Steven     | King      |         124 | Kevin       | Mourgos     |
+| Matthew    | Weiss     |         125 | Julia       | Nayer       |
+| Matthew    | Weiss     |         126 | Irene       | Mikkilineni |
+| Matthew    | Weiss     |         127 | James       | Landry      |
+| Matthew    | Weiss     |         128 | Steven      | Markle      |
+| Adam       | Fripp     |         129 | Laura       | Bissot      |
+| Adam       | Fripp     |         130 | Mozhe       | Atkinson    |
+| Adam       | Fripp     |         131 | James       | Marlow      |
+| Adam       | Fripp     |         132 | TJ          | Olson       |
+| Payam      | Kaufling  |         133 | Jason       | Mallin      |
+| Payam      | Kaufling  |         134 | Michael     | Rogers      |
+| Payam      | Kaufling  |         135 | Ki          | Gee         |
+| Payam      | Kaufling  |         136 | Hazel       | Philtanker  |
+| Shanta     | Vollman   |         137 | Renske      | Ladwig      |
+| Shanta     | Vollman   |         138 | Stephen     | Stiles      |
+| Shanta     | Vollman   |         139 | John        | Seo         |
+| Shanta     | Vollman   |         140 | Joshua      | Patel       |
+| Kevin      | Mourgos   |         141 | Trenna      | Rajs        |
+| Kevin      | Mourgos   |         142 | Curtis      | Davies      |
+| Kevin      | Mourgos   |         143 | Randall     | Matos       |
+| Kevin      | Mourgos   |         144 | Peter       | Vargas      |
+| Steven     | King      |         145 | John        | Russell     |
+| Steven     | King      |         146 | Karen       | Partners    |
+| Steven     | King      |         147 | Alberto     | Errazuriz   |
+| Steven     | King      |         148 | Gerald      | Cambrault   |
+| Steven     | King      |         149 | Eleni       | Zlotkey     |
+| John       | Russell   |         150 | Peter       | Tucker      |
+| John       | Russell   |         151 | David       | Bernstein   |
+| John       | Russell   |         152 | Peter       | Hall        |
+| John       | Russell   |         153 | Christopher | Olsen       |
+| John       | Russell   |         154 | Nanette     | Cambrault   |
+| John       | Russell   |         155 | Oliver      | Tuvault     |
+| Karen      | Partners  |         156 | Janette     | King        |
+| Karen      | Partners  |         157 | Patrick     | Sully       |
+| Karen      | Partners  |         158 | Allan       | McEwen      |
+| Karen      | Partners  |         159 | Lindsey     | Smith       |
+| Karen      | Partners  |         160 | Louise      | Doran       |
+| Karen      | Partners  |         161 | Sarath      | Sewall      |
+| Alberto    | Errazuriz |         162 | Clara       | Vishney     |
+| Alberto    | Errazuriz |         163 | Danielle    | Greene      |
+| Alberto    | Errazuriz |         164 | Mattea      | Marvins     |
+| Alberto    | Errazuriz |         165 | David       | Lee         |
+| Alberto    | Errazuriz |         166 | Sundar      | Ande        |
+| Alberto    | Errazuriz |         167 | Amit        | Banda       |
+| Gerald     | Cambrault |         168 | Lisa        | Ozer        |
+| Gerald     | Cambrault |         169 | Harrison    | Bloom       |
+| Gerald     | Cambrault |         170 | Tayler      | Fox         |
+| Gerald     | Cambrault |         171 | William     | Smith       |
+| Gerald     | Cambrault |         172 | Elizabeth   | Bates       |
+| Gerald     | Cambrault |         173 | Sundita     | Kumar       |
+| Eleni      | Zlotkey   |         174 | Ellen       | Abel        |
+| Eleni      | Zlotkey   |         175 | Alyssa      | Hutton      |
+| Eleni      | Zlotkey   |         176 | Jonathon    | Taylor      |
+| Eleni      | Zlotkey   |         177 | Jack        | Livingston  |
+| Eleni      | Zlotkey   |         178 | Kimberely   | Grant       |
+| Eleni      | Zlotkey   |         179 | Charles     | Johnson     |
+| Matthew    | Weiss     |         180 | Winston     | Taylor      |
+| Matthew    | Weiss     |         181 | Jean        | Fleaur      |
+| Matthew    | Weiss     |         182 | Martha      | Sullivan    |
+| Matthew    | Weiss     |         183 | Girard      | Geoni       |
+| Adam       | Fripp     |         184 | Nandita     | Sarchand    |
+| Adam       | Fripp     |         185 | Alexis      | Bull        |
+| Adam       | Fripp     |         186 | Julia       | Dellinger   |
+| Adam       | Fripp     |         187 | Anthony     | Cabrio      |
+| Payam      | Kaufling  |         188 | Kelly       | Chung       |
+| Payam      | Kaufling  |         189 | Jennifer    | Dilly       |
+| Payam      | Kaufling  |         190 | Timothy     | Gates       |
+| Payam      | Kaufling  |         191 | Randall     | Perkins     |
+| Shanta     | Vollman   |         192 | Sarah       | Bell        |
+| Shanta     | Vollman   |         193 | Britney     | Everett     |
+| Shanta     | Vollman   |         194 | Samuel      | McCain      |
+| Shanta     | Vollman   |         195 | Vance       | Jones       |
+| Kevin      | Mourgos   |         196 | Alana       | Walsh       |
+| Kevin      | Mourgos   |         197 | Kevin       | Feeney      |
+| Kevin      | Mourgos   |         198 | Donald      | OConnell    |
+| Kevin      | Mourgos   |         199 | Douglas     | Grant       |
+| Neena      | Kochhar   |         200 | Jennifer    | Whalen      |
+| Steven     | King      |         201 | Michael     | Hartstein   |
+| Michael    | Hartstein |         202 | Pat         | Fay         |
+| Neena      | Kochhar   |         203 | Susan       | Mavris      |
+| Neena      | Kochhar   |         204 | Hermann     | Baer        |
+| Neena      | Kochhar   |         205 | Shelley     | Higgins     |
+| Shelley    | Higgins   |         206 | William     | Gietz       |
++------------+-----------+-------------+-------------+-------------+
+106 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner join employees b on a.employee_id = b.manager_id order by a.fisrt_name;
+ERROR: 1054 (42S22): Unknown column 'a.fisrt_name' in 'order clause'
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner join employees b on a.employee_id = b.manager_id order by a.first_name;
++------------+-----------+-------------+-------------+-------------+
+| first_name | last_name | employee_id | first_name  | last_name   |
++------------+-----------+-------------+-------------+-------------+
+| Adam       | Fripp     |         185 | Alexis      | Bull        |
+| Adam       | Fripp     |         129 | Laura       | Bissot      |
+| Adam       | Fripp     |         184 | Nandita     | Sarchand    |
+| Adam       | Fripp     |         187 | Anthony     | Cabrio      |
+| Adam       | Fripp     |         186 | Julia       | Dellinger   |
+| Adam       | Fripp     |         132 | TJ          | Olson       |
+| Adam       | Fripp     |         131 | James       | Marlow      |
+| Adam       | Fripp     |         130 | Mozhe       | Atkinson    |
+| Alberto    | Errazuriz |         164 | Mattea      | Marvins     |
+| Alberto    | Errazuriz |         166 | Sundar      | Ande        |
+| Alberto    | Errazuriz |         167 | Amit        | Banda       |
+| Alberto    | Errazuriz |         163 | Danielle    | Greene      |
+| Alberto    | Errazuriz |         165 | David       | Lee         |
+| Alberto    | Errazuriz |         162 | Clara       | Vishney     |
+| Alexander  | Hunold    |         104 | Bruce       | Ernst       |
+| Alexander  | Hunold    |         105 | David       | Austin      |
+| Alexander  | Hunold    |         106 | Valli       | Pataballa   |
+| Alexander  | Hunold    |         107 | Diana       | Lorentz     |
+| Den        | Raphaely  |         115 | Alexander   | Khoo        |
+| Den        | Raphaely  |         116 | Shelli      | Baida       |
+| Den        | Raphaely  |         117 | Sigal       | Tobias      |
+| Den        | Raphaely  |         118 | Guy         | Himuro      |
+| Den        | Raphaely  |         119 | Karen       | Colmenares  |
+| Eleni      | Zlotkey   |         174 | Ellen       | Abel        |
+| Eleni      | Zlotkey   |         175 | Alyssa      | Hutton      |
+| Eleni      | Zlotkey   |         176 | Jonathon    | Taylor      |
+| Eleni      | Zlotkey   |         177 | Jack        | Livingston  |
+| Eleni      | Zlotkey   |         178 | Kimberely   | Grant       |
+| Eleni      | Zlotkey   |         179 | Charles     | Johnson     |
+| Gerald     | Cambrault |         171 | William     | Smith       |
+| Gerald     | Cambrault |         168 | Lisa        | Ozer        |
+| Gerald     | Cambrault |         169 | Harrison    | Bloom       |
+| Gerald     | Cambrault |         170 | Tayler      | Fox         |
+| Gerald     | Cambrault |         172 | Elizabeth   | Bates       |
+| Gerald     | Cambrault |         173 | Sundita     | Kumar       |
+| John       | Russell   |         150 | Peter       | Tucker      |
+| John       | Russell   |         155 | Oliver      | Tuvault     |
+| John       | Russell   |         153 | Christopher | Olsen       |
+| John       | Russell   |         152 | Peter       | Hall        |
+| John       | Russell   |         151 | David       | Bernstein   |
+| John       | Russell   |         154 | Nanette     | Cambrault   |
+| Karen      | Partners  |         156 | Janette     | King        |
+| Karen      | Partners  |         160 | Louise      | Doran       |
+| Karen      | Partners  |         158 | Allan       | McEwen      |
+| Karen      | Partners  |         159 | Lindsey     | Smith       |
+| Karen      | Partners  |         161 | Sarath      | Sewall      |
+| Karen      | Partners  |         157 | Patrick     | Sully       |
+| Kevin      | Mourgos   |         199 | Douglas     | Grant       |
+| Kevin      | Mourgos   |         141 | Trenna      | Rajs        |
+| Kevin      | Mourgos   |         144 | Peter       | Vargas      |
+| Kevin      | Mourgos   |         142 | Curtis      | Davies      |
+| Kevin      | Mourgos   |         143 | Randall     | Matos       |
+| Kevin      | Mourgos   |         196 | Alana       | Walsh       |
+| Kevin      | Mourgos   |         197 | Kevin       | Feeney      |
+| Kevin      | Mourgos   |         198 | Donald      | OConnell    |
+| Lex        | De Haan   |         103 | Alexander   | Hunold      |
+| Matthew    | Weiss     |         128 | Steven      | Markle      |
+| Matthew    | Weiss     |         127 | James       | Landry      |
+| Matthew    | Weiss     |         125 | Julia       | Nayer       |
+| Matthew    | Weiss     |         126 | Irene       | Mikkilineni |
+| Matthew    | Weiss     |         180 | Winston     | Taylor      |
+| Matthew    | Weiss     |         181 | Jean        | Fleaur      |
+| Matthew    | Weiss     |         182 | Martha      | Sullivan    |
+| Matthew    | Weiss     |         183 | Girard      | Geoni       |
+| Michael    | Hartstein |         202 | Pat         | Fay         |
+| Nancy      | Greenberg |         111 | Ismael      | Sciarra     |
+| Nancy      | Greenberg |         113 | Luis        | Popp        |
+| Nancy      | Greenberg |         112 | Jose Manuel | Urman       |
+| Nancy      | Greenberg |         110 | John        | Chen        |
+| Nancy      | Greenberg |         109 | Daniel      | Faviet      |
+| Neena      | Kochhar   |         205 | Shelley     | Higgins     |
+| Neena      | Kochhar   |         108 | Nancy       | Greenberg   |
+| Neena      | Kochhar   |         200 | Jennifer    | Whalen      |
+| Neena      | Kochhar   |         203 | Susan       | Mavris      |
+| Neena      | Kochhar   |         204 | Hermann     | Baer        |
+| Payam      | Kaufling  |         134 | Michael     | Rogers      |
+| Payam      | Kaufling  |         133 | Jason       | Mallin      |
+| Payam      | Kaufling  |         188 | Kelly       | Chung       |
+| Payam      | Kaufling  |         189 | Jennifer    | Dilly       |
+| Payam      | Kaufling  |         191 | Randall     | Perkins     |
+| Payam      | Kaufling  |         136 | Hazel       | Philtanker  |
+| Payam      | Kaufling  |         135 | Ki          | Gee         |
+| Payam      | Kaufling  |         190 | Timothy     | Gates       |
+| Shanta     | Vollman   |         138 | Stephen     | Stiles      |
+| Shanta     | Vollman   |         139 | John        | Seo         |
+| Shanta     | Vollman   |         140 | Joshua      | Patel       |
+| Shanta     | Vollman   |         193 | Britney     | Everett     |
+| Shanta     | Vollman   |         192 | Sarah       | Bell        |
+| Shanta     | Vollman   |         194 | Samuel      | McCain      |
+| Shanta     | Vollman   |         195 | Vance       | Jones       |
+| Shanta     | Vollman   |         137 | Renske      | Ladwig      |
+| Shelley    | Higgins   |         206 | William     | Gietz       |
+| Steven     | King      |         148 | Gerald      | Cambrault   |
+| Steven     | King      |         101 | Neena       | Kochhar     |
+| Steven     | King      |         147 | Alberto     | Errazuriz   |
+| Steven     | King      |         146 | Karen       | Partners    |
+| Steven     | King      |         145 | John        | Russell     |
+| Steven     | King      |         114 | Den         | Raphaely    |
+| Steven     | King      |         124 | Kevin       | Mourgos     |
+| Steven     | King      |         123 | Shanta      | Vollman     |
+| Steven     | King      |         122 | Payam       | Kaufling    |
+| Steven     | King      |         201 | Michael     | Hartstein   |
+| Steven     | King      |         121 | Adam        | Fripp       |
+| Steven     | King      |         120 | Matthew     | Weiss       |
+| Steven     | King      |         102 | Lex         | De Haan     |
+| Steven     | King      |         149 | Eleni       | Zlotkey     |
++------------+-----------+-------------+-------------+-------------+
+106 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | decimal(6,0) | NO   | PRI | 0       |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(25)  | NO   | MUL | NULL    |       |
+| EMAIL          | varchar(25)  | NO   | UNI | NULL    |       |
+| PHONE_NUMBER   | varchar(20)  | YES  |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   | MUL | NULL    |       |
+| SALARY         | decimal(8,2) | YES  |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | NULL    |       |
+| MANAGER_ID     | decimal(6,0) | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc jobs;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| JOB_ID     | varchar(10)  | NO   | PRI |         |       |
+| JOB_TITLE  | varchar(35)  | NO   |     | NULL    |       |
+| MIN_SALARY | decimal(6,0) | YES  |     | NULL    |       |
+| MAX_SALARY | decimal(6,0) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc department;
+ERROR: 1146 (42S02): Table 'comp2.department' doesn't exist
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   |select a.first_name, a.last_name, b.job_title, c.department_n;
+ERROR: 1109 (42S02): Unknown table 'a' in field listrst_name, a.last_name, b.job_title, c.department_n;
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.first_name, a.last_name, b.job_title, c.department_na
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.first_name, a.last_name, b.job_title, c.department_nam
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.first_name, a.last_name, b.job_title, c.department_name
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.first_name, a.last_name, b.job_title, c.department_name
+ MySQL  localhost:3306 ssl  comp2  SQL >
+                                         select a.first_name, a.last_name, b.job_title, c.department_n;                                        select a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner joinselect a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner joinselect a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner joinselect a.first_name, a.last_name, b.job_title, c.department_n;                                        select a.first_name, a.last_name, b.job_title, c.department_n;                                        select a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner joinselect a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner joinselect a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner joinselect a.employee_id, a.first_name, a.last_name, b.first_name, b.last_name from employees a inner joinselect a.employee_id, a.first_name, a.last_name, b.first_name, b.last_name from employees a inner joinselect a.employee_id, a.first_name, a.last_name, b.first_name, b.last_name from employees a inner joinselect a.department_name, b.first_name, b.last_name from departments a inner join employees b on a.manselect a.department_name, b.first_name, b.last_name from departments a inner join employees b on a.manselect a.employee_id, a.first_name, a.last_name, b.first_name, b.last_name from employees a inner joinselect a.employee_id, a.first_name, a.last_name, b.first_name, b.last_name from employees a inner joinselect a.employee_id, a.first_name, a.last_name, b.first_name, b.last_name from employees a inner joinselect a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner joinselect a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner joinselect a.first_name, a.last_name, b.employee_id, b.first_name, b.last_name from employees a inner joinselect a.first_name, a.last_name, b.job_title, c.department_n;                                        select a.first_name, a.last_name, b.job_title, c.department_n;                                        select a.first_name, a.last_name, b.job_title, c.department_n;
+ERROR: 1109 (42S02): Unknown table 'a' in field list
+ MySQL  localhost:3306 ssl  comp2  SQL > desc jobs;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| JOB_ID     | varchar(10)  | NO   | PRI |         |       |
+| JOB_TITLE  | varchar(35)  | NO   |     | NULL    |       |
+| MIN_SALARY | decimal(6,0) | YES  |     | NULL    |       |
+| MAX_SALARY | decimal(6,0) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | decimal(6,0) | NO   | PRI | 0       |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(25)  | NO   | MUL | NULL    |       |
+| EMAIL          | varchar(25)  | NO   | UNI | NULL    |       |
+| PHONE_NUMBER   | varchar(20)  | YES  |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   | MUL | NULL    |       |
+| SALARY         | decimal(8,2) | YES  |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | NULL    |       |
+| MANAGER_ID     | decimal(6,0) | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.first_name, a.last_name, b.job_title,
+                                      -> c.department_name from employees a inner join
+                                      -> jobs b on a.job_id = b.job_id inner join
+                                      -> departments c on a.manager_id = c.manager_id;
++-------------+------------+-------------------------------+----------------------+
+| first_name  | last_name  | job_title                     | department_name      |
++-------------+------------+-------------------------------+----------------------+
+| Pat         | Fay        | Marketing Representative      | Marketing            |
+| Alexander   | Khoo       | Purchasing Clerk              | Purchasing           |
+| Shelli      | Baida      | Purchasing Clerk              | Purchasing           |
+| Sigal       | Tobias     | Purchasing Clerk              | Purchasing           |
+| Guy         | Himuro     | Purchasing Clerk              | Purchasing           |
+| Karen       | Colmenares | Purchasing Clerk              | Purchasing           |
+| Laura       | Bissot     | Stock Clerk                   | Shipping             |
+| Mozhe       | Atkinson   | Stock Clerk                   | Shipping             |
+| James       | Marlow     | Stock Clerk                   | Shipping             |
+| TJ          | Olson      | Stock Clerk                   | Shipping             |
+| Nandita     | Sarchand   | Shipping Clerk                | Shipping             |
+| Alexis      | Bull       | Shipping Clerk                | Shipping             |
+| Julia       | Dellinger  | Shipping Clerk                | Shipping             |
+| Anthony     | Cabrio     | Shipping Clerk                | Shipping             |
+| Bruce       | Ernst      | Programmer                    | IT                   |
+| David       | Austin     | Programmer                    | IT                   |
+| Valli       | Pataballa  | Programmer                    | IT                   |
+| Diana       | Lorentz    | Programmer                    | IT                   |
+| Peter       | Tucker     | Sales Representative          | Sales                |
+| David       | Bernstein  | Sales Representative          | Sales                |
+| Peter       | Hall       | Sales Representative          | Sales                |
+| Christopher | Olsen      | Sales Representative          | Sales                |
+| Nanette     | Cambrault  | Sales Representative          | Sales                |
+| Oliver      | Tuvault    | Sales Representative          | Sales                |
+| Neena       | Kochhar    | Administration Vice President | Executive            |
+| Lex         | De Haan    | Administration Vice President | Executive            |
+| Den         | Raphaely   | Purchasing Manager            | Executive            |
+| Matthew     | Weiss      | Stock Manager                 | Executive            |
+| Adam        | Fripp      | Stock Manager                 | Executive            |
+| Payam       | Kaufling   | Stock Manager                 | Executive            |
+| Shanta      | Vollman    | Stock Manager                 | Executive            |
+| Kevin       | Mourgos    | Stock Manager                 | Executive            |
+| John        | Russell    | Sales Manager                 | Executive            |
+| Karen       | Partners   | Sales Manager                 | Executive            |
+| Alberto     | Errazuriz  | Sales Manager                 | Executive            |
+| Gerald      | Cambrault  | Sales Manager                 | Executive            |
+| Eleni       | Zlotkey    | Sales Manager                 | Executive            |
+| Michael     | Hartstein  | Marketing Manager             | Executive            |
+| Daniel      | Faviet     | Accountant                    | Finance              |
+| John        | Chen       | Accountant                    | Finance              |
+| Ismael      | Sciarra    | Accountant                    | Finance              |
+| Jose Manuel | Urman      | Accountant                    | Finance              |
+| Luis        | Popp       | Accountant                    | Finance              |
+| William     | Gietz      | Public Accountant             | Accounting           |
+| Steven      | King       | President                     | Treasury             |
+| Steven      | King       | President                     | Corporate Tax        |
+| Steven      | King       | President                     | Control And Credit   |
+| Steven      | King       | President                     | Shareholder Services |
+| Steven      | King       | President                     | Benefits             |
+| Steven      | King       | President                     | Manufacturing        |
+| Steven      | King       | President                     | Construction         |
+| Steven      | King       | President                     | Contracting          |
+| Steven      | King       | President                     | Operations           |
+| Steven      | King       | President                     | IT Support           |
+| Steven      | King       | President                     | NOC                  |
+| Steven      | King       | President                     | IT Helpdesk          |
+| Steven      | King       | President                     | Government Sales     |
+| Steven      | King       | President                     | Retail Sales         |
+| Steven      | King       | President                     | Recruiting           |
+| Steven      | King       | President                     | Payroll              |
++-------------+------------+-------------------------------+----------------------+
+60 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL >
+
+Final de la parte Uno
+
+Inicio Parte Dos:
+
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 12
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| agencia            |
+| comp2              |
+| company            |
+| credit_cards       |
+| eva_2              |
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+12 rows in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  SQL > \use comp2
+Default schema set to `comp2`.
+Fetching global names, object names from `comp2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  comp2  SQL > show tables;
++-----------------+
+| Tables_in_comp2 |
++-----------------+
+| countries       |
+| departments     |
+| employees       |
+| job_history     |
+| jobs            |
+| locations       |
+| regions         |
++-----------------+
+7 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | decimal(6,0) | NO   | PRI | 0       |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(25)  | NO   | MUL | NULL    |       |
+| EMAIL          | varchar(25)  | NO   | UNI | NULL    |       |
+| PHONE_NUMBER   | varchar(20)  | YES  |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   | MUL | NULL    |       |
+| SALARY         | decimal(8,2) | YES  |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | NULL    |       |
+| MANAGER_ID     | decimal(6,0) | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.department_name, b.firts_name, b.last_name
+                                      -> from departments a left join employees b
+                                      -> on a.department_id = b.department_id;
+ERROR: 1054 (42S22): Unknown column 'b.firts_name' in 'field list'
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.department_name, b.first_name, b.last_name from departments a left join employees b on a.department_id = b.department_id;
++----------------------+-------------+-------------+
+| department_name      | first_name  | last_name   |
++----------------------+-------------+-------------+
+| Administration       | Jennifer    | Whalen      |
+| Marketing            | Michael     | Hartstein   |
+| Marketing            | Pat         | Fay         |
+| Purchasing           | Den         | Raphaely    |
+| Purchasing           | Alexander   | Khoo        |
+| Purchasing           | Shelli      | Baida       |
+| Purchasing           | Sigal       | Tobias      |
+| Purchasing           | Guy         | Himuro      |
+| Purchasing           | Karen       | Colmenares  |
+| Human Resources      | Susan       | Mavris      |
+| Shipping             | Matthew     | Weiss       |
+| Shipping             | Adam        | Fripp       |
+| Shipping             | Payam       | Kaufling    |
+| Shipping             | Shanta      | Vollman     |
+| Shipping             | Kevin       | Mourgos     |
+| Shipping             | Julia       | Nayer       |
+| Shipping             | Irene       | Mikkilineni |
+| Shipping             | James       | Landry      |
+| Shipping             | Steven      | Markle      |
+| Shipping             | Laura       | Bissot      |
+| Shipping             | Mozhe       | Atkinson    |
+| Shipping             | James       | Marlow      |
+| Shipping             | TJ          | Olson       |
+| Shipping             | Jason       | Mallin      |
+| Shipping             | Michael     | Rogers      |
+| Shipping             | Ki          | Gee         |
+| Shipping             | Hazel       | Philtanker  |
+| Shipping             | Renske      | Ladwig      |
+| Shipping             | Stephen     | Stiles      |
+| Shipping             | John        | Seo         |
+| Shipping             | Joshua      | Patel       |
+| Shipping             | Trenna      | Rajs        |
+| Shipping             | Curtis      | Davies      |
+| Shipping             | Randall     | Matos       |
+| Shipping             | Peter       | Vargas      |
+| Shipping             | Winston     | Taylor      |
+| Shipping             | Jean        | Fleaur      |
+| Shipping             | Martha      | Sullivan    |
+| Shipping             | Girard      | Geoni       |
+| Shipping             | Nandita     | Sarchand    |
+| Shipping             | Alexis      | Bull        |
+| Shipping             | Julia       | Dellinger   |
+| Shipping             | Anthony     | Cabrio      |
+| Shipping             | Kelly       | Chung       |
+| Shipping             | Jennifer    | Dilly       |
+| Shipping             | Timothy     | Gates       |
+| Shipping             | Randall     | Perkins     |
+| Shipping             | Sarah       | Bell        |
+| Shipping             | Britney     | Everett     |
+| Shipping             | Samuel      | McCain      |
+| Shipping             | Vance       | Jones       |
+| Shipping             | Alana       | Walsh       |
+| Shipping             | Kevin       | Feeney      |
+| Shipping             | Donald      | OConnell    |
+| Shipping             | Douglas     | Grant       |
+| IT                   | Alexander   | Hunold      |
+| IT                   | Bruce       | Ernst       |
+| IT                   | David       | Austin      |
+| IT                   | Valli       | Pataballa   |
+| IT                   | Diana       | Lorentz     |
+| Public Relations     | Hermann     | Baer        |
+| Sales                | John        | Russell     |
+| Sales                | Karen       | Partners    |
+| Sales                | Alberto     | Errazuriz   |
+| Sales                | Gerald      | Cambrault   |
+| Sales                | Eleni       | Zlotkey     |
+| Sales                | Peter       | Tucker      |
+| Sales                | David       | Bernstein   |
+| Sales                | Peter       | Hall        |
+| Sales                | Christopher | Olsen       |
+| Sales                | Nanette     | Cambrault   |
+| Sales                | Oliver      | Tuvault     |
+| Sales                | Janette     | King        |
+| Sales                | Patrick     | Sully       |
+| Sales                | Allan       | McEwen      |
+| Sales                | Lindsey     | Smith       |
+| Sales                | Louise      | Doran       |
+| Sales                | Sarath      | Sewall      |
+| Sales                | Clara       | Vishney     |
+| Sales                | Danielle    | Greene      |
+| Sales                | Mattea      | Marvins     |
+| Sales                | David       | Lee         |
+| Sales                | Sundar      | Ande        |
+| Sales                | Amit        | Banda       |
+| Sales                | Lisa        | Ozer        |
+| Sales                | Harrison    | Bloom       |
+| Sales                | Tayler      | Fox         |
+| Sales                | William     | Smith       |
+| Sales                | Elizabeth   | Bates       |
+| Sales                | Sundita     | Kumar       |
+| Sales                | Ellen       | Abel        |
+| Sales                | Alyssa      | Hutton      |
+| Sales                | Jonathon    | Taylor      |
+| Sales                | Jack        | Livingston  |
+| Sales                | Charles     | Johnson     |
+| Executive            | Steven      | King        |
+| Executive            | Neena       | Kochhar     |
+| Executive            | Lex         | De Haan     |
+| Finance              | Nancy       | Greenberg   |
+| Finance              | Daniel      | Faviet      |
+| Finance              | John        | Chen        |
+| Finance              | Ismael      | Sciarra     |
+| Finance              | Jose Manuel | Urman       |
+| Finance              | Luis        | Popp        |
+| Accounting           | Shelley     | Higgins     |
+| Accounting           | William     | Gietz       |
+| Treasury             | NULL        | NULL        |
+| Corporate Tax        | NULL        | NULL        |
+| Control And Credit   | NULL        | NULL        |
+| Shareholder Services | NULL        | NULL        |
+| Benefits             | NULL        | NULL        |
+| Manufacturing        | NULL        | NULL        |
+| Construction         | NULL        | NULL        |
+| Contracting          | NULL        | NULL        |
+| Operations           | NULL        | NULL        |
+| IT Support           | NULL        | NULL        |
+| NOC                  | NULL        | NULL        |
+| IT Helpdesk          | NULL        | NULL        |
+| Government Sales     | NULL        | NULL        |
+| Retail Sales         | NULL        | NULL        |
+| Recruiting           | NULL        | NULL        |
+| Payroll              | NULL        | NULL        |
++----------------------+-------------+-------------+
+122 rows in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | decimal(6,0) | NO   | PRI | 0       |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(25)  | NO   | MUL | NULL    |       |
+| EMAIL          | varchar(25)  | NO   | UNI | NULL    |       |
+| PHONE_NUMBER   | varchar(20)  | YES  |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   | MUL | NULL    |       |
+| SALARY         | decimal(8,2) | YES  |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | NULL    |       |
+| MANAGER_ID     | decimal(6,0) | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0010 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name,
+                                      -> b.deparment_name from employees a left join
+                                      -> deparments b on a.department_id = b.department_id;
+ERROR: 1146 (42S02): Table 'comp2.deparments' doesn't exist
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name, b.deparment_name from employees a left join departments b on a.department_id = b.department_id;
+ERROR: 1054 (42S22): Unknown column 'b.deparment_name' in 'field list'
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.employee_id, a.first_name, a.last_name, b.department_name from employees a left join departments b on a.department_id = b.department_id;
++-------------+-------------+-------------+------------------+
+| employee_id | first_name  | last_name   | department_name  |
++-------------+-------------+-------------+------------------+
+|         100 | Steven      | King        | Executive        |
+|         101 | Neena       | Kochhar     | Executive        |
+|         102 | Lex         | De Haan     | Executive        |
+|         103 | Alexander   | Hunold      | IT               |
+|         104 | Bruce       | Ernst       | IT               |
+|         105 | David       | Austin      | IT               |
+|         106 | Valli       | Pataballa   | IT               |
+|         107 | Diana       | Lorentz     | IT               |
+|         108 | Nancy       | Greenberg   | Finance          |
+|         109 | Daniel      | Faviet      | Finance          |
+|         110 | John        | Chen        | Finance          |
+|         111 | Ismael      | Sciarra     | Finance          |
+|         112 | Jose Manuel | Urman       | Finance          |
+|         113 | Luis        | Popp        | Finance          |
+|         114 | Den         | Raphaely    | Purchasing       |
+|         115 | Alexander   | Khoo        | Purchasing       |
+|         116 | Shelli      | Baida       | Purchasing       |
+|         117 | Sigal       | Tobias      | Purchasing       |
+|         118 | Guy         | Himuro      | Purchasing       |
+|         119 | Karen       | Colmenares  | Purchasing       |
+|         120 | Matthew     | Weiss       | Shipping         |
+|         121 | Adam        | Fripp       | Shipping         |
+|         122 | Payam       | Kaufling    | Shipping         |
+|         123 | Shanta      | Vollman     | Shipping         |
+|         124 | Kevin       | Mourgos     | Shipping         |
+|         125 | Julia       | Nayer       | Shipping         |
+|         126 | Irene       | Mikkilineni | Shipping         |
+|         127 | James       | Landry      | Shipping         |
+|         128 | Steven      | Markle      | Shipping         |
+|         129 | Laura       | Bissot      | Shipping         |
+|         130 | Mozhe       | Atkinson    | Shipping         |
+|         131 | James       | Marlow      | Shipping         |
+|         132 | TJ          | Olson       | Shipping         |
+|         133 | Jason       | Mallin      | Shipping         |
+|         134 | Michael     | Rogers      | Shipping         |
+|         135 | Ki          | Gee         | Shipping         |
+|         136 | Hazel       | Philtanker  | Shipping         |
+|         137 | Renske      | Ladwig      | Shipping         |
+|         138 | Stephen     | Stiles      | Shipping         |
+|         139 | John        | Seo         | Shipping         |
+|         140 | Joshua      | Patel       | Shipping         |
+|         141 | Trenna      | Rajs        | Shipping         |
+|         142 | Curtis      | Davies      | Shipping         |
+|         143 | Randall     | Matos       | Shipping         |
+|         144 | Peter       | Vargas      | Shipping         |
+|         145 | John        | Russell     | Sales            |
+|         146 | Karen       | Partners    | Sales            |
+|         147 | Alberto     | Errazuriz   | Sales            |
+|         148 | Gerald      | Cambrault   | Sales            |
+|         149 | Eleni       | Zlotkey     | Sales            |
+|         150 | Peter       | Tucker      | Sales            |
+|         151 | David       | Bernstein   | Sales            |
+|         152 | Peter       | Hall        | Sales            |
+|         153 | Christopher | Olsen       | Sales            |
+|         154 | Nanette     | Cambrault   | Sales            |
+|         155 | Oliver      | Tuvault     | Sales            |
+|         156 | Janette     | King        | Sales            |
+|         157 | Patrick     | Sully       | Sales            |
+|         158 | Allan       | McEwen      | Sales            |
+|         159 | Lindsey     | Smith       | Sales            |
+|         160 | Louise      | Doran       | Sales            |
+|         161 | Sarath      | Sewall      | Sales            |
+|         162 | Clara       | Vishney     | Sales            |
+|         163 | Danielle    | Greene      | Sales            |
+|         164 | Mattea      | Marvins     | Sales            |
+|         165 | David       | Lee         | Sales            |
+|         166 | Sundar      | Ande        | Sales            |
+|         167 | Amit        | Banda       | Sales            |
+|         168 | Lisa        | Ozer        | Sales            |
+|         169 | Harrison    | Bloom       | Sales            |
+|         170 | Tayler      | Fox         | Sales            |
+|         171 | William     | Smith       | Sales            |
+|         172 | Elizabeth   | Bates       | Sales            |
+|         173 | Sundita     | Kumar       | Sales            |
+|         174 | Ellen       | Abel        | Sales            |
+|         175 | Alyssa      | Hutton      | Sales            |
+|         176 | Jonathon    | Taylor      | Sales            |
+|         177 | Jack        | Livingston  | Sales            |
+|         178 | Kimberely   | Grant       | NULL             |
+|         179 | Charles     | Johnson     | Sales            |
+|         180 | Winston     | Taylor      | Shipping         |
+|         181 | Jean        | Fleaur      | Shipping         |
+|         182 | Martha      | Sullivan    | Shipping         |
+|         183 | Girard      | Geoni       | Shipping         |
+|         184 | Nandita     | Sarchand    | Shipping         |
+|         185 | Alexis      | Bull        | Shipping         |
+|         186 | Julia       | Dellinger   | Shipping         |
+|         187 | Anthony     | Cabrio      | Shipping         |
+|         188 | Kelly       | Chung       | Shipping         |
+|         189 | Jennifer    | Dilly       | Shipping         |
+|         190 | Timothy     | Gates       | Shipping         |
+|         191 | Randall     | Perkins     | Shipping         |
+|         192 | Sarah       | Bell        | Shipping         |
+|         193 | Britney     | Everett     | Shipping         |
+|         194 | Samuel      | McCain      | Shipping         |
+|         195 | Vance       | Jones       | Shipping         |
+|         196 | Alana       | Walsh       | Shipping         |
+|         197 | Kevin       | Feeney      | Shipping         |
+|         198 | Donald      | OConnell    | Shipping         |
+|         199 | Douglas     | Grant       | Shipping         |
+|         200 | Jennifer    | Whalen      | Administration   |
+|         201 | Michael     | Hartstein   | Marketing        |
+|         202 | Pat         | Fay         | Marketing        |
+|         203 | Susan       | Mavris      | Human Resources  |
+|         204 | Hermann     | Baer        | Public Relations |
+|         205 | Shelley     | Higgins     | Accounting       |
+|         206 | William     | Gietz       | Accounting       |
++-------------+-------------+-------------+------------------+
+107 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > show tables;
++-----------------+
+| Tables_in_comp2 |
++-----------------+
+| countries       |
+| departments     |
+| employees       |
+| job_history     |
+| jobs            |
+| locations       |
+| regions         |
++-----------------+
+7 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc locations;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| LOCATION_ID    | decimal(4,0) | NO   | PRI | 0       |       |
+| STREET_ADDRESS | varchar(40)  | YES  |     | NULL    |       |
+| POSTAL_CODE    | varchar(12)  | YES  |     | NULL    |       |
+| CITY           | varchar(30)  | NO   | MUL | NULL    |       |
+| STATE_PROVINCE | varchar(25)  | YES  | MUL | NULL    |       |
+| COUNTRY_ID     | varchar(2)   | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+6 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc countries;
++--------------+---------------+------+-----+---------+-------+
+| Field        | Type          | Null | Key | Default | Extra |
++--------------+---------------+------+-----+---------+-------+
+| COUNTRY_ID   | varchar(2)    | NO   | PRI | NULL    |       |
+| COUNTRY_NAME | varchar(40)   | YES  |     | NULL    |       |
+| REGION_ID    | decimal(10,0) | YES  | MUL | NULL    |       |
++--------------+---------------+------+-----+---------+-------+
+3 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.department_name, b.street_address, b.city
+                                      -> , b.state_province, c.country_name from departments a
+                                      -> right join locations b on a.location_id = b.location_id
+                                      -> right join countries c on b.country_id = c.country_id;
++----------------------+---------------------------+---------------------+------------------+--------------------------+
+| department_name      | street_address            | city                | state_province   | country_name             |
++----------------------+---------------------------+---------------------+------------------+--------------------------+
+| NULL                 | NULL                      | NULL                | NULL             | Argentina                |
+| NULL                 | 12-98 Victoria Street     | Sydney              | New South Wales  | Australia                |
+| NULL                 | NULL                      | NULL                | NULL             | Belgium                  |
+| NULL                 | Rua Frei Caneca 1360      | Sao Paulo           | Sao Paulo        | Brazil                   |
+| Marketing            | 147 Spadina Ave           | Toronto             | Ontario          | Canada                   |
+| NULL                 | 6092 Boxwood St           | Whitehorse          | Yukon            | Canada                   |
+| NULL                 | 20 Rue des Corps-Saints   | Geneva              | Geneve           | Switzerland              |
+| NULL                 | Murtenstrasse 921         | Bern                | BE               | Switzerland              |
+| NULL                 | 40-5-12 Laogianggen       | Beijing             |                  | China                    |
+| Public Relations     | Schwanthalerstr. 7031     | Munich              | Bavaria          | Germany                  |
+| NULL                 | NULL                      | NULL                | NULL             | Denmark                  |
+| NULL                 | NULL                      | NULL                | NULL             | Egypt                    |
+| NULL                 | NULL                      | NULL                | NULL             | France                   |
+| NULL                 | NULL                      | NULL                | NULL             | HongKong                 |
+| NULL                 | NULL                      | NULL                | NULL             | Israel                   |
+| NULL                 | 1298 Vileparle (E)        | Bombay              | Maharashtra      | India                    |
+| NULL                 | 1297 Via Cola di Rie      | Roma                |                  | Italy                    |
+| NULL                 | 93091 Calle della Testa   | Venice              |                  | Italy                    |
+| NULL                 | 2017 Shinjuku-ku          | Tokyo               | Tokyo Prefecture | Japan                    |
+| NULL                 | 9450 Kamiya-cho           | Hiroshima           |                  | Japan                    |
+| NULL                 | NULL                      | NULL                | NULL             | Kuwait                   |
+| NULL                 | NULL                      | NULL                | NULL             | Mexico                   |
+| NULL                 | NULL                      | NULL                | NULL             | Nigeria                  |
+| NULL                 | Pieter Breughelstraat 837 | Utrecht             | Utrecht          | Netherlands              |
+| NULL                 | 198 Clementi North        | Singapore           |                  | Singapore                |
+| Human Resources      | 8204 Arthur St            | London              |                  | United Kingdom           |
+| NULL                 | 9702 Chester Road         | Stretford           | Manchester       | United Kingdom           |
+| IT                   | 2014 Jabberwocky Rd       | Southlake           | Texas            | United States of America |
+| Shipping             | 2011 Interiors Blvd       | South San Francisco | California       | United States of America |
+| NULL                 | 2007 Zagora St            | South Brunswick     | New Jersey       | United States of America |
+| Administration       | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Purchasing           | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Executive            | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Finance              | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Accounting           | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Treasury             | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Corporate Tax        | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Control And Credit   | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Shareholder Services | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Benefits             | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Manufacturing        | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Construction         | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Contracting          | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Operations           | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| IT Support           | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| NOC                  | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| IT Helpdesk          | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Government Sales     | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Retail Sales         | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Recruiting           | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| Payroll              | 2004 Charade Rd           | Seattle             | Washington       | United States of America |
+| NULL                 | NULL                      | NULL                | NULL             | Zambia                   |
+| NULL                 | NULL                      | NULL                | NULL             | Zimbabwe                 |
++----------------------+---------------------------+---------------------+------------------+--------------------------+
+53 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL >
+fin parte 2
+
+parte 3
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 13
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| agencia            |
+| comp2              |
+| company            |
+| credit_cards       |
+| eva_2              |
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+12 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  SQL > \use comp2
+Default schema set to `comp2`.
+Fetching global names, object names from `comp2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  comp2  SQL > show tables;
++-----------------+
+| Tables_in_comp2 |
++-----------------+
+| countries       |
+| departments     |
+| employees       |
+| job_history     |
+| jobs            |
+| locations       |
+| regions         |
++-----------------+
+7 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc regions;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| REGION_ID   | decimal(5,0) | NO   | PRI | NULL    |       |
+| REGION_NAME | varchar(25)  | YES  | UNI | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+2 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc locations;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| LOCATION_ID    | decimal(4,0) | NO   | PRI | 0       |       |
+| STREET_ADDRESS | varchar(40)  | YES  |     | NULL    |       |
+| POSTAL_CODE    | varchar(12)  | YES  |     | NULL    |       |
+| CITY           | varchar(30)  | NO   | MUL | NULL    |       |
+| STATE_PROVINCE | varchar(25)  | YES  | MUL | NULL    |       |
+| COUNTRY_ID     | varchar(2)   | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+6 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc countries;
++--------------+---------------+------+-----+---------+-------+
+| Field        | Type          | Null | Key | Default | Extra |
++--------------+---------------+------+-----+---------+-------+
+| COUNTRY_ID   | varchar(2)    | NO   | PRI | NULL    |       |
+| COUNTRY_NAME | varchar(40)   | YES  |     | NULL    |       |
+| REGION_ID    | decimal(10,0) | YES  | MUL | NULL    |       |
++--------------+---------------+------+-----+---------+-------+
+3 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select a.country_name, b.department_name from
+                                      -> countries a left join departments b
+                                      -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+ MySQL  localhost:3306 ssl  comp2  SQL > select c.country_name, b.department_name from locations a
+                                      -> inner join deparments b on a.deparment_id = b.department_id
+                                      -> ;
+ERROR: 1146 (42S02): Table 'comp2.deparments' doesn't exist
+ MySQL  localhost:3306 ssl  comp2  SQL > select c.country_name, b.department_name from locations a inner join departments b on a.location_id = b.location_id right join countries c
+                                      -> on a.country_id = c.country_id;
++--------------------------+----------------------+
+| country_name             | department_name      |
++--------------------------+----------------------+
+| Argentina                | NULL                 |
+| Australia                | NULL                 |
+| Belgium                  | NULL                 |
+| Brazil                   | NULL                 |
+| Canada                   | Marketing            |
+| Switzerland              | NULL                 |
+| China                    | NULL                 |
+| Germany                  | Public Relations     |
+| Denmark                  | NULL                 |
+| Egypt                    | NULL                 |
+| France                   | NULL                 |
+| HongKong                 | NULL                 |
+| Israel                   | NULL                 |
+| India                    | NULL                 |
+| Italy                    | NULL                 |
+| Japan                    | NULL                 |
+| Kuwait                   | NULL                 |
+| Mexico                   | NULL                 |
+| Nigeria                  | NULL                 |
+| Netherlands              | NULL                 |
+| Singapore                | NULL                 |
+| United Kingdom           | Human Resources      |
+| United States of America | IT                   |
+| United States of America | Shipping             |
+| United States of America | Administration       |
+| United States of America | Purchasing           |
+| United States of America | Executive            |
+| United States of America | Finance              |
+| United States of America | Accounting           |
+| United States of America | Treasury             |
+| United States of America | Corporate Tax        |
+| United States of America | Control And Credit   |
+| United States of America | Shareholder Services |
+| United States of America | Benefits             |
+| United States of America | Manufacturing        |
+| United States of America | Construction         |
+| United States of America | Contracting          |
+| United States of America | Operations           |
+| United States of America | IT Support           |
+| United States of America | NOC                  |
+| United States of America | IT Helpdesk          |
+| United States of America | Government Sales     |
+| United States of America | Retail Sales         |
+| United States of America | Recruiting           |
+| United States of America | Payroll              |
+| Zambia                   | NULL                 |
+| Zimbabwe                 | NULL                 |
++--------------------------+----------------------+
+47 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select c.country_name, b.department_name from locations a inner join departments b on a.location_id = b.location_id right join countries c on a.country_id = c.country_id order by b.department_name;
++--------------------------+----------------------+
+| country_name             | department_name      |
++--------------------------+----------------------+
+| Argentina                | NULL                 |
+| Australia                | NULL                 |
+| Belgium                  | NULL                 |
+| Brazil                   | NULL                 |
+| Zambia                   | NULL                 |
+| Switzerland              | NULL                 |
+| China                    | NULL                 |
+| Zimbabwe                 | NULL                 |
+| Denmark                  | NULL                 |
+| Egypt                    | NULL                 |
+| France                   | NULL                 |
+| HongKong                 | NULL                 |
+| Israel                   | NULL                 |
+| India                    | NULL                 |
+| Italy                    | NULL                 |
+| Japan                    | NULL                 |
+| Kuwait                   | NULL                 |
+| Mexico                   | NULL                 |
+| Nigeria                  | NULL                 |
+| Netherlands              | NULL                 |
+| Singapore                | NULL                 |
+| United States of America | Accounting           |
+| United States of America | Administration       |
+| United States of America | Benefits             |
+| United States of America | Construction         |
+| United States of America | Contracting          |
+| United States of America | Control And Credit   |
+| United States of America | Corporate Tax        |
+| United States of America | Executive            |
+| United States of America | Finance              |
+| United States of America | Government Sales     |
+| United Kingdom           | Human Resources      |
+| United States of America | IT                   |
+| United States of America | IT Helpdesk          |
+| United States of America | IT Support           |
+| United States of America | Manufacturing        |
+| Canada                   | Marketing            |
+| United States of America | NOC                  |
+| United States of America | Operations           |
+| United States of America | Payroll              |
+| Germany                  | Public Relations     |
+| United States of America | Purchasing           |
+| United States of America | Recruiting           |
+| United States of America | Retail Sales         |
+| United States of America | Shareholder Services |
+| United States of America | Shipping             |
+| United States of America | Treasury             |
++--------------------------+----------------------+
+47 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > show tables;
++-----------------+
+| Tables_in_comp2 |
++-----------------+
+| countries       |
+| departments     |
+| employees       |
+| job_history     |
+| jobs            |
+| locations       |
+| regions         |
++-----------------+
+7 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employee;
+ERROR: 1146 (42S02): Table 'comp2.employee' doesn't exist
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | decimal(6,0) | NO   | PRI | 0       |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(25)  | NO   | MUL | NULL    |       |
+| EMAIL          | varchar(25)  | NO   | UNI | NULL    |       |
+| PHONE_NUMBER   | varchar(20)  | YES  |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   | MUL | NULL    |       |
+| SALARY         | decimal(8,2) | YES  |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | NULL    |       |
+| MANAGER_ID     | decimal(6,0) | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select count(*) from employees;
++----------+
+| count(*) |
++----------+
+|      107 |
++----------+
+1 row in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from employees;
++-------------+-------------+-------------+----------+--------------------+------------+------------+----------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME  | LAST_NAME   | EMAIL    | PHONE_NUMBER       | HIRE_DATE  | JOB_ID     | SALARY   | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+-------------+-------------+----------+--------------------+------------+------------+----------+----------------+------------+---------------+
+|         100 | Steven      | King        | SKING    | 515.123.4567       | 1987-06-17 | AD_PRES    | 24000.00 |           0.00 |          0 |            90 |
+|         101 | Neena       | Kochhar     | NKOCHHAR | 515.123.4568       | 1987-06-18 | AD_VP      | 17000.00 |           0.00 |        100 |            90 |
+|         102 | Lex         | De Haan     | LDEHAAN  | 515.123.4569       | 1987-06-19 | AD_VP      | 17000.00 |           0.00 |        100 |            90 |
+|         103 | Alexander   | Hunold      | AHUNOLD  | 590.423.4567       | 1987-06-20 | IT_PROG    |  9000.00 |           0.00 |        102 |            60 |
+|         104 | Bruce       | Ernst       | BERNST   | 590.423.4568       | 1987-06-21 | IT_PROG    |  6000.00 |           0.00 |        103 |            60 |
+|         105 | David       | Austin      | DAUSTIN  | 590.423.4569       | 1987-06-22 | IT_PROG    |  4800.00 |           0.00 |        103 |            60 |
+|         106 | Valli       | Pataballa   | VPATABAL | 590.423.4560       | 1987-06-23 | IT_PROG    |  4800.00 |           0.00 |        103 |            60 |
+|         107 | Diana       | Lorentz     | DLORENTZ | 590.423.5567       | 1987-06-24 | IT_PROG    |  4200.00 |           0.00 |        103 |            60 |
+|         108 | Nancy       | Greenberg   | NGREENBE | 515.124.4569       | 1987-06-25 | FI_MGR     | 12000.00 |           0.00 |        101 |           100 |
+|         109 | Daniel      | Faviet      | DFAVIET  | 515.124.4169       | 1987-06-26 | FI_ACCOUNT |  9000.00 |           0.00 |        108 |           100 |
+|         110 | John        | Chen        | JCHEN    | 515.124.4269       | 1987-06-27 | FI_ACCOUNT |  8200.00 |           0.00 |        108 |           100 |
+|         111 | Ismael      | Sciarra     | ISCIARRA | 515.124.4369       | 1987-06-28 | FI_ACCOUNT |  7700.00 |           0.00 |        108 |           100 |
+|         112 | Jose Manuel | Urman       | JMURMAN  | 515.124.4469       | 1987-06-29 | FI_ACCOUNT |  7800.00 |           0.00 |        108 |           100 |
+|         113 | Luis        | Popp        | LPOPP    | 515.124.4567       | 1987-06-30 | FI_ACCOUNT |  6900.00 |           0.00 |        108 |           100 |
+|         114 | Den         | Raphaely    | DRAPHEAL | 515.127.4561       | 1987-07-01 | PU_MAN     | 11000.00 |           0.00 |        100 |            30 |
+|         115 | Alexander   | Khoo        | AKHOO    | 515.127.4562       | 1987-07-02 | PU_CLERK   |  3100.00 |           0.00 |        114 |            30 |
+|         116 | Shelli      | Baida       | SBAIDA   | 515.127.4563       | 1987-07-03 | PU_CLERK   |  2900.00 |           0.00 |        114 |            30 |
+|         117 | Sigal       | Tobias      | STOBIAS  | 515.127.4564       | 1987-07-04 | PU_CLERK   |  2800.00 |           0.00 |        114 |            30 |
+|         118 | Guy         | Himuro      | GHIMURO  | 515.127.4565       | 1987-07-05 | PU_CLERK   |  2600.00 |           0.00 |        114 |            30 |
+|         119 | Karen       | Colmenares  | KCOLMENA | 515.127.4566       | 1987-07-06 | PU_CLERK   |  2500.00 |           0.00 |        114 |            30 |
+|         120 | Matthew     | Weiss       | MWEISS   | 650.123.1234       | 1987-07-07 | ST_MAN     |  8000.00 |           0.00 |        100 |            50 |
+|         121 | Adam        | Fripp       | AFRIPP   | 650.123.2234       | 1987-07-08 | ST_MAN     |  8200.00 |           0.00 |        100 |            50 |
+|         122 | Payam       | Kaufling    | PKAUFLIN | 650.123.3234       | 1987-07-09 | ST_MAN     |  7900.00 |           0.00 |        100 |            50 |
+|         123 | Shanta      | Vollman     | SVOLLMAN | 650.123.4234       | 1987-07-10 | ST_MAN     |  6500.00 |           0.00 |        100 |            50 |
+|         124 | Kevin       | Mourgos     | KMOURGOS | 650.123.5234       | 1987-07-11 | ST_MAN     |  5800.00 |           0.00 |        100 |            50 |
+|         125 | Julia       | Nayer       | JNAYER   | 650.124.1214       | 1987-07-12 | ST_CLERK   |  3200.00 |           0.00 |        120 |            50 |
+|         126 | Irene       | Mikkilineni | IMIKKILI | 650.124.1224       | 1987-07-13 | ST_CLERK   |  2700.00 |           0.00 |        120 |            50 |
+|         127 | James       | Landry      | JLANDRY  | 650.124.1334       | 1987-07-14 | ST_CLERK   |  2400.00 |           0.00 |        120 |            50 |
+|         128 | Steven      | Markle      | SMARKLE  | 650.124.1434       | 1987-07-15 | ST_CLERK   |  2200.00 |           0.00 |        120 |            50 |
+|         129 | Laura       | Bissot      | LBISSOT  | 650.124.5234       | 1987-07-16 | ST_CLERK   |  3300.00 |           0.00 |        121 |            50 |
+|         130 | Mozhe       | Atkinson    | MATKINSO | 650.124.6234       | 1987-07-17 | ST_CLERK   |  2800.00 |           0.00 |        121 |            50 |
+|         131 | James       | Marlow      | JAMRLOW  | 650.124.7234       | 1987-07-18 | ST_CLERK   |  2500.00 |           0.00 |        121 |            50 |
+|         132 | TJ          | Olson       | TJOLSON  | 650.124.8234       | 1987-07-19 | ST_CLERK   |  2100.00 |           0.00 |        121 |            50 |
+|         133 | Jason       | Mallin      | JMALLIN  | 650.127.1934       | 1987-07-20 | ST_CLERK   |  3300.00 |           0.00 |        122 |            50 |
+|         134 | Michael     | Rogers      | MROGERS  | 650.127.1834       | 1987-07-21 | ST_CLERK   |  2900.00 |           0.00 |        122 |            50 |
+|         135 | Ki          | Gee         | KGEE     | 650.127.1734       | 1987-07-22 | ST_CLERK   |  2400.00 |           0.00 |        122 |            50 |
+|         136 | Hazel       | Philtanker  | HPHILTAN | 650.127.1634       | 1987-07-23 | ST_CLERK   |  2200.00 |           0.00 |        122 |            50 |
+|         137 | Renske      | Ladwig      | RLADWIG  | 650.121.1234       | 1987-07-24 | ST_CLERK   |  3600.00 |           0.00 |        123 |            50 |
+|         138 | Stephen     | Stiles      | SSTILES  | 650.121.2034       | 1987-07-25 | ST_CLERK   |  3200.00 |           0.00 |        123 |            50 |
+|         139 | John        | Seo         | JSEO     | 650.121.2019       | 1987-07-26 | ST_CLERK   |  2700.00 |           0.00 |        123 |            50 |
+|         140 | Joshua      | Patel       | JPATEL   | 650.121.1834       | 1987-07-27 | ST_CLERK   |  2500.00 |           0.00 |        123 |            50 |
+|         141 | Trenna      | Rajs        | TRAJS    | 650.121.8009       | 1987-07-28 | ST_CLERK   |  3500.00 |           0.00 |        124 |            50 |
+|         142 | Curtis      | Davies      | CDAVIES  | 650.121.2994       | 1987-07-29 | ST_CLERK   |  3100.00 |           0.00 |        124 |            50 |
+|         143 | Randall     | Matos       | RMATOS   | 650.121.2874       | 1987-07-30 | ST_CLERK   |  2600.00 |           0.00 |        124 |            50 |
+|         144 | Peter       | Vargas      | PVARGAS  | 650.121.2004       | 1987-07-31 | ST_CLERK   |  2500.00 |           0.00 |        124 |            50 |
+|         145 | John        | Russell     | JRUSSEL  | 011.44.1344.429268 | 1987-08-01 | SA_MAN     | 14000.00 |           0.40 |        100 |            80 |
+|         146 | Karen       | Partners    | KPARTNER | 011.44.1344.467268 | 1987-08-02 | SA_MAN     | 13500.00 |           0.30 |        100 |            80 |
+|         147 | Alberto     | Errazuriz   | AERRAZUR | 011.44.1344.429278 | 1987-08-03 | SA_MAN     | 12000.00 |           0.30 |        100 |            80 |
+|         148 | Gerald      | Cambrault   | GCAMBRAU | 011.44.1344.619268 | 1987-08-04 | SA_MAN     | 11000.00 |           0.30 |        100 |            80 |
+|         149 | Eleni       | Zlotkey     | EZLOTKEY | 011.44.1344.429018 | 1987-08-05 | SA_MAN     | 10500.00 |           0.20 |        100 |            80 |
+|         150 | Peter       | Tucker      | PTUCKER  | 011.44.1344.129268 | 1987-08-06 | SA_REP     | 10000.00 |           0.30 |        145 |            80 |
+|         151 | David       | Bernstein   | DBERNSTE | 011.44.1344.345268 | 1987-08-07 | SA_REP     |  9500.00 |           0.25 |        145 |            80 |
+|         152 | Peter       | Hall        | PHALL    | 011.44.1344.478968 | 1987-08-08 | SA_REP     |  9000.00 |           0.25 |        145 |            80 |
+|         153 | Christopher | Olsen       | COLSEN   | 011.44.1344.498718 | 1987-08-09 | SA_REP     |  8000.00 |           0.20 |        145 |            80 |
+|         154 | Nanette     | Cambrault   | NCAMBRAU | 011.44.1344.987668 | 1987-08-10 | SA_REP     |  7500.00 |           0.20 |        145 |            80 |
+|         155 | Oliver      | Tuvault     | OTUVAULT | 011.44.1344.486508 | 1987-08-11 | SA_REP     |  7000.00 |           0.15 |        145 |            80 |
+|         156 | Janette     | King        | JKING    | 011.44.1345.429268 | 1987-08-12 | SA_REP     | 10000.00 |           0.35 |        146 |            80 |
+|         157 | Patrick     | Sully       | PSULLY   | 011.44.1345.929268 | 1987-08-13 | SA_REP     |  9500.00 |           0.35 |        146 |            80 |
+|         158 | Allan       | McEwen      | AMCEWEN  | 011.44.1345.829268 | 1987-08-14 | SA_REP     |  9000.00 |           0.35 |        146 |            80 |
+|         159 | Lindsey     | Smith       | LSMITH   | 011.44.1345.729268 | 1987-08-15 | SA_REP     |  8000.00 |           0.30 |        146 |            80 |
+|         160 | Louise      | Doran       | LDORAN   | 011.44.1345.629268 | 1987-08-16 | SA_REP     |  7500.00 |           0.30 |        146 |            80 |
+|         161 | Sarath      | Sewall      | SSEWALL  | 011.44.1345.529268 | 1987-08-17 | SA_REP     |  7000.00 |           0.25 |        146 |            80 |
+|         162 | Clara       | Vishney     | CVISHNEY | 011.44.1346.129268 | 1987-08-18 | SA_REP     | 10500.00 |           0.25 |        147 |            80 |
+|         163 | Danielle    | Greene      | DGREENE  | 011.44.1346.229268 | 1987-08-19 | SA_REP     |  9500.00 |           0.15 |        147 |            80 |
+|         164 | Mattea      | Marvins     | MMARVINS | 011.44.1346.329268 | 1987-08-20 | SA_REP     |  7200.00 |           0.10 |        147 |            80 |
+|         165 | David       | Lee         | DLEE     | 011.44.1346.529268 | 1987-08-21 | SA_REP     |  6800.00 |           0.10 |        147 |            80 |
+|         166 | Sundar      | Ande        | SANDE    | 011.44.1346.629268 | 1987-08-22 | SA_REP     |  6400.00 |           0.10 |        147 |            80 |
+|         167 | Amit        | Banda       | ABANDA   | 011.44.1346.729268 | 1987-08-23 | SA_REP     |  6200.00 |           0.10 |        147 |            80 |
+|         168 | Lisa        | Ozer        | LOZER    | 011.44.1343.929268 | 1987-08-24 | SA_REP     | 11500.00 |           0.25 |        148 |            80 |
+|         169 | Harrison    | Bloom       | HBLOOM   | 011.44.1343.829268 | 1987-08-25 | SA_REP     | 10000.00 |           0.20 |        148 |            80 |
+|         170 | Tayler      | Fox         | TFOX     | 011.44.1343.729268 | 1987-08-26 | SA_REP     |  9600.00 |           0.20 |        148 |            80 |
+|         171 | William     | Smith       | WSMITH   | 011.44.1343.629268 | 1987-08-27 | SA_REP     |  7400.00 |           0.15 |        148 |            80 |
+|         172 | Elizabeth   | Bates       | EBATES   | 011.44.1343.529268 | 1987-08-28 | SA_REP     |  7300.00 |           0.15 |        148 |            80 |
+|         173 | Sundita     | Kumar       | SKUMAR   | 011.44.1343.329268 | 1987-08-29 | SA_REP     |  6100.00 |           0.10 |        148 |            80 |
+|         174 | Ellen       | Abel        | EABEL    | 011.44.1644.429267 | 1987-08-30 | SA_REP     | 11000.00 |           0.30 |        149 |            80 |
+|         175 | Alyssa      | Hutton      | AHUTTON  | 011.44.1644.429266 | 1987-08-31 | SA_REP     |  8800.00 |           0.25 |        149 |            80 |
+|         176 | Jonathon    | Taylor      | JTAYLOR  | 011.44.1644.429265 | 1987-09-01 | SA_REP     |  8600.00 |           0.20 |        149 |            80 |
+|         177 | Jack        | Livingston  | JLIVINGS | 011.44.1644.429264 | 1987-09-02 | SA_REP     |  8400.00 |           0.20 |        149 |            80 |
+|         178 | Kimberely   | Grant       | KGRANT   | 011.44.1644.429263 | 1987-09-03 | SA_REP     |  7000.00 |           0.15 |        149 |             0 |
+|         179 | Charles     | Johnson     | CJOHNSON | 011.44.1644.429262 | 1987-09-04 | SA_REP     |  6200.00 |           0.10 |        149 |            80 |
+|         180 | Winston     | Taylor      | WTAYLOR  | 650.507.9876       | 1987-09-05 | SH_CLERK   |  3200.00 |           0.00 |        120 |            50 |
+|         181 | Jean        | Fleaur      | JFLEAUR  | 650.507.9877       | 1987-09-06 | SH_CLERK   |  3100.00 |           0.00 |        120 |            50 |
+|         182 | Martha      | Sullivan    | MSULLIVA | 650.507.9878       | 1987-09-07 | SH_CLERK   |  2500.00 |           0.00 |        120 |            50 |
+|         183 | Girard      | Geoni       | GGEONI   | 650.507.9879       | 1987-09-08 | SH_CLERK   |  2800.00 |           0.00 |        120 |            50 |
+|         184 | Nandita     | Sarchand    | NSARCHAN | 650.509.1876       | 1987-09-09 | SH_CLERK   |  4200.00 |           0.00 |        121 |            50 |
+|         185 | Alexis      | Bull        | ABULL    | 650.509.2876       | 1987-09-10 | SH_CLERK   |  4100.00 |           0.00 |        121 |            50 |
+|         186 | Julia       | Dellinger   | JDELLING | 650.509.3876       | 1987-09-11 | SH_CLERK   |  3400.00 |           0.00 |        121 |            50 |
+|         187 | Anthony     | Cabrio      | ACABRIO  | 650.509.4876       | 1987-09-12 | SH_CLERK   |  3000.00 |           0.00 |        121 |            50 |
+|         188 | Kelly       | Chung       | KCHUNG   | 650.505.1876       | 1987-09-13 | SH_CLERK   |  3800.00 |           0.00 |        122 |            50 |
+|         189 | Jennifer    | Dilly       | JDILLY   | 650.505.2876       | 1987-09-14 | SH_CLERK   |  3600.00 |           0.00 |        122 |            50 |
+|         190 | Timothy     | Gates       | TGATES   | 650.505.3876       | 1987-09-15 | SH_CLERK   |  2900.00 |           0.00 |        122 |            50 |
+|         191 | Randall     | Perkins     | RPERKINS | 650.505.4876       | 1987-09-16 | SH_CLERK   |  2500.00 |           0.00 |        122 |            50 |
+|         192 | Sarah       | Bell        | SBELL    | 650.501.1876       | 1987-09-17 | SH_CLERK   |  4000.00 |           0.00 |        123 |            50 |
+|         193 | Britney     | Everett     | BEVERETT | 650.501.2876       | 1987-09-18 | SH_CLERK   |  3900.00 |           0.00 |        123 |            50 |
+|         194 | Samuel      | McCain      | SMCCAIN  | 650.501.3876       | 1987-09-19 | SH_CLERK   |  3200.00 |           0.00 |        123 |            50 |
+|         195 | Vance       | Jones       | VJONES   | 650.501.4876       | 1987-09-20 | SH_CLERK   |  2800.00 |           0.00 |        123 |            50 |
+|         196 | Alana       | Walsh       | AWALSH   | 650.507.9811       | 1987-09-21 | SH_CLERK   |  3100.00 |           0.00 |        124 |            50 |
+|         197 | Kevin       | Feeney      | KFEENEY  | 650.507.9822       | 1987-09-22 | SH_CLERK   |  3000.00 |           0.00 |        124 |            50 |
+|         198 | Donald      | OConnell    | DOCONNEL | 650.507.9833       | 1987-09-23 | SH_CLERK   |  2600.00 |           0.00 |        124 |            50 |
+|         199 | Douglas     | Grant       | DGRANT   | 650.507.9844       | 1987-09-24 | SH_CLERK   |  2600.00 |           0.00 |        124 |            50 |
+|         200 | Jennifer    | Whalen      | JWHALEN  | 515.123.4444       | 1987-09-25 | AD_ASST    |  4400.00 |           0.00 |        101 |            10 |
+|         201 | Michael     | Hartstein   | MHARTSTE | 515.123.5555       | 1987-09-26 | MK_MAN     | 13000.00 |           0.00 |        100 |            20 |
+|         202 | Pat         | Fay         | PFAY     | 603.123.6666       | 1987-09-27 | MK_REP     |  6000.00 |           0.00 |        201 |            20 |
+|         203 | Susan       | Mavris      | SMAVRIS  | 515.123.7777       | 1987-09-28 | HR_REP     |  6500.00 |           0.00 |        101 |            40 |
+|         204 | Hermann     | Baer        | HBAER    | 515.123.8888       | 1987-09-29 | PR_REP     | 10000.00 |           0.00 |        101 |            70 |
+|         205 | Shelley     | Higgins     | SHIGGINS | 515.123.8080       | 1987-09-30 | AC_MGR     | 12000.00 |           0.00 |        101 |           110 |
+|         206 | William     | Gietz       | WGIETZ   | 515.123.8181       | 1987-10-01 | AC_ACCOUNT |  8300.00 |           0.00 |        205 |           110 |
++-------------+-------------+-------------+----------+--------------------+------------+------------+----------+----------------+------------+---------------+
+107 rows in set (0.0005 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from employees order by manager_id;
++-------------+-------------+-------------+----------+--------------------+------------+------------+----------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME  | LAST_NAME   | EMAIL    | PHONE_NUMBER       | HIRE_DATE  | JOB_ID     | SALARY   | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+-------------+-------------+----------+--------------------+------------+------------+----------+----------------+------------+---------------+
+|         100 | Steven      | King        | SKING    | 515.123.4567       | 1987-06-17 | AD_PRES    | 24000.00 |           0.00 |          0 |            90 |
+|         101 | Neena       | Kochhar     | NKOCHHAR | 515.123.4568       | 1987-06-18 | AD_VP      | 17000.00 |           0.00 |        100 |            90 |
+|         102 | Lex         | De Haan     | LDEHAAN  | 515.123.4569       | 1987-06-19 | AD_VP      | 17000.00 |           0.00 |        100 |            90 |
+|         114 | Den         | Raphaely    | DRAPHEAL | 515.127.4561       | 1987-07-01 | PU_MAN     | 11000.00 |           0.00 |        100 |            30 |
+|         120 | Matthew     | Weiss       | MWEISS   | 650.123.1234       | 1987-07-07 | ST_MAN     |  8000.00 |           0.00 |        100 |            50 |
+|         121 | Adam        | Fripp       | AFRIPP   | 650.123.2234       | 1987-07-08 | ST_MAN     |  8200.00 |           0.00 |        100 |            50 |
+|         122 | Payam       | Kaufling    | PKAUFLIN | 650.123.3234       | 1987-07-09 | ST_MAN     |  7900.00 |           0.00 |        100 |            50 |
+|         123 | Shanta      | Vollman     | SVOLLMAN | 650.123.4234       | 1987-07-10 | ST_MAN     |  6500.00 |           0.00 |        100 |            50 |
+|         124 | Kevin       | Mourgos     | KMOURGOS | 650.123.5234       | 1987-07-11 | ST_MAN     |  5800.00 |           0.00 |        100 |            50 |
+|         145 | John        | Russell     | JRUSSEL  | 011.44.1344.429268 | 1987-08-01 | SA_MAN     | 14000.00 |           0.40 |        100 |            80 |
+|         146 | Karen       | Partners    | KPARTNER | 011.44.1344.467268 | 1987-08-02 | SA_MAN     | 13500.00 |           0.30 |        100 |            80 |
+|         147 | Alberto     | Errazuriz   | AERRAZUR | 011.44.1344.429278 | 1987-08-03 | SA_MAN     | 12000.00 |           0.30 |        100 |            80 |
+|         148 | Gerald      | Cambrault   | GCAMBRAU | 011.44.1344.619268 | 1987-08-04 | SA_MAN     | 11000.00 |           0.30 |        100 |            80 |
+|         149 | Eleni       | Zlotkey     | EZLOTKEY | 011.44.1344.429018 | 1987-08-05 | SA_MAN     | 10500.00 |           0.20 |        100 |            80 |
+|         201 | Michael     | Hartstein   | MHARTSTE | 515.123.5555       | 1987-09-26 | MK_MAN     | 13000.00 |           0.00 |        100 |            20 |
+|         108 | Nancy       | Greenberg   | NGREENBE | 515.124.4569       | 1987-06-25 | FI_MGR     | 12000.00 |           0.00 |        101 |           100 |
+|         200 | Jennifer    | Whalen      | JWHALEN  | 515.123.4444       | 1987-09-25 | AD_ASST    |  4400.00 |           0.00 |        101 |            10 |
+|         203 | Susan       | Mavris      | SMAVRIS  | 515.123.7777       | 1987-09-28 | HR_REP     |  6500.00 |           0.00 |        101 |            40 |
+|         204 | Hermann     | Baer        | HBAER    | 515.123.8888       | 1987-09-29 | PR_REP     | 10000.00 |           0.00 |        101 |            70 |
+|         205 | Shelley     | Higgins     | SHIGGINS | 515.123.8080       | 1987-09-30 | AC_MGR     | 12000.00 |           0.00 |        101 |           110 |
+|         103 | Alexander   | Hunold      | AHUNOLD  | 590.423.4567       | 1987-06-20 | IT_PROG    |  9000.00 |           0.00 |        102 |            60 |
+|         104 | Bruce       | Ernst       | BERNST   | 590.423.4568       | 1987-06-21 | IT_PROG    |  6000.00 |           0.00 |        103 |            60 |
+|         105 | David       | Austin      | DAUSTIN  | 590.423.4569       | 1987-06-22 | IT_PROG    |  4800.00 |           0.00 |        103 |            60 |
+|         106 | Valli       | Pataballa   | VPATABAL | 590.423.4560       | 1987-06-23 | IT_PROG    |  4800.00 |           0.00 |        103 |            60 |
+|         107 | Diana       | Lorentz     | DLORENTZ | 590.423.5567       | 1987-06-24 | IT_PROG    |  4200.00 |           0.00 |        103 |            60 |
+|         109 | Daniel      | Faviet      | DFAVIET  | 515.124.4169       | 1987-06-26 | FI_ACCOUNT |  9000.00 |           0.00 |        108 |           100 |
+|         110 | John        | Chen        | JCHEN    | 515.124.4269       | 1987-06-27 | FI_ACCOUNT |  8200.00 |           0.00 |        108 |           100 |
+|         111 | Ismael      | Sciarra     | ISCIARRA | 515.124.4369       | 1987-06-28 | FI_ACCOUNT |  7700.00 |           0.00 |        108 |           100 |
+|         112 | Jose Manuel | Urman       | JMURMAN  | 515.124.4469       | 1987-06-29 | FI_ACCOUNT |  7800.00 |           0.00 |        108 |           100 |
+|         113 | Luis        | Popp        | LPOPP    | 515.124.4567       | 1987-06-30 | FI_ACCOUNT |  6900.00 |           0.00 |        108 |           100 |
+|         115 | Alexander   | Khoo        | AKHOO    | 515.127.4562       | 1987-07-02 | PU_CLERK   |  3100.00 |           0.00 |        114 |            30 |
+|         116 | Shelli      | Baida       | SBAIDA   | 515.127.4563       | 1987-07-03 | PU_CLERK   |  2900.00 |           0.00 |        114 |            30 |
+|         117 | Sigal       | Tobias      | STOBIAS  | 515.127.4564       | 1987-07-04 | PU_CLERK   |  2800.00 |           0.00 |        114 |            30 |
+|         118 | Guy         | Himuro      | GHIMURO  | 515.127.4565       | 1987-07-05 | PU_CLERK   |  2600.00 |           0.00 |        114 |            30 |
+|         119 | Karen       | Colmenares  | KCOLMENA | 515.127.4566       | 1987-07-06 | PU_CLERK   |  2500.00 |           0.00 |        114 |            30 |
+|         125 | Julia       | Nayer       | JNAYER   | 650.124.1214       | 1987-07-12 | ST_CLERK   |  3200.00 |           0.00 |        120 |            50 |
+|         126 | Irene       | Mikkilineni | IMIKKILI | 650.124.1224       | 1987-07-13 | ST_CLERK   |  2700.00 |           0.00 |        120 |            50 |
+|         127 | James       | Landry      | JLANDRY  | 650.124.1334       | 1987-07-14 | ST_CLERK   |  2400.00 |           0.00 |        120 |            50 |
+|         128 | Steven      | Markle      | SMARKLE  | 650.124.1434       | 1987-07-15 | ST_CLERK   |  2200.00 |           0.00 |        120 |            50 |
+|         180 | Winston     | Taylor      | WTAYLOR  | 650.507.9876       | 1987-09-05 | SH_CLERK   |  3200.00 |           0.00 |        120 |            50 |
+|         181 | Jean        | Fleaur      | JFLEAUR  | 650.507.9877       | 1987-09-06 | SH_CLERK   |  3100.00 |           0.00 |        120 |            50 |
+|         182 | Martha      | Sullivan    | MSULLIVA | 650.507.9878       | 1987-09-07 | SH_CLERK   |  2500.00 |           0.00 |        120 |            50 |
+|         183 | Girard      | Geoni       | GGEONI   | 650.507.9879       | 1987-09-08 | SH_CLERK   |  2800.00 |           0.00 |        120 |            50 |
+|         129 | Laura       | Bissot      | LBISSOT  | 650.124.5234       | 1987-07-16 | ST_CLERK   |  3300.00 |           0.00 |        121 |            50 |
+|         130 | Mozhe       | Atkinson    | MATKINSO | 650.124.6234       | 1987-07-17 | ST_CLERK   |  2800.00 |           0.00 |        121 |            50 |
+|         131 | James       | Marlow      | JAMRLOW  | 650.124.7234       | 1987-07-18 | ST_CLERK   |  2500.00 |           0.00 |        121 |            50 |
+|         132 | TJ          | Olson       | TJOLSON  | 650.124.8234       | 1987-07-19 | ST_CLERK   |  2100.00 |           0.00 |        121 |            50 |
+|         184 | Nandita     | Sarchand    | NSARCHAN | 650.509.1876       | 1987-09-09 | SH_CLERK   |  4200.00 |           0.00 |        121 |            50 |
+|         185 | Alexis      | Bull        | ABULL    | 650.509.2876       | 1987-09-10 | SH_CLERK   |  4100.00 |           0.00 |        121 |            50 |
+|         186 | Julia       | Dellinger   | JDELLING | 650.509.3876       | 1987-09-11 | SH_CLERK   |  3400.00 |           0.00 |        121 |            50 |
+|         187 | Anthony     | Cabrio      | ACABRIO  | 650.509.4876       | 1987-09-12 | SH_CLERK   |  3000.00 |           0.00 |        121 |            50 |
+|         133 | Jason       | Mallin      | JMALLIN  | 650.127.1934       | 1987-07-20 | ST_CLERK   |  3300.00 |           0.00 |        122 |            50 |
+|         134 | Michael     | Rogers      | MROGERS  | 650.127.1834       | 1987-07-21 | ST_CLERK   |  2900.00 |           0.00 |        122 |            50 |
+|         135 | Ki          | Gee         | KGEE     | 650.127.1734       | 1987-07-22 | ST_CLERK   |  2400.00 |           0.00 |        122 |            50 |
+|         136 | Hazel       | Philtanker  | HPHILTAN | 650.127.1634       | 1987-07-23 | ST_CLERK   |  2200.00 |           0.00 |        122 |            50 |
+|         188 | Kelly       | Chung       | KCHUNG   | 650.505.1876       | 1987-09-13 | SH_CLERK   |  3800.00 |           0.00 |        122 |            50 |
+|         189 | Jennifer    | Dilly       | JDILLY   | 650.505.2876       | 1987-09-14 | SH_CLERK   |  3600.00 |           0.00 |        122 |            50 |
+|         190 | Timothy     | Gates       | TGATES   | 650.505.3876       | 1987-09-15 | SH_CLERK   |  2900.00 |           0.00 |        122 |            50 |
+|         191 | Randall     | Perkins     | RPERKINS | 650.505.4876       | 1987-09-16 | SH_CLERK   |  2500.00 |           0.00 |        122 |            50 |
+|         137 | Renske      | Ladwig      | RLADWIG  | 650.121.1234       | 1987-07-24 | ST_CLERK   |  3600.00 |           0.00 |        123 |            50 |
+|         138 | Stephen     | Stiles      | SSTILES  | 650.121.2034       | 1987-07-25 | ST_CLERK   |  3200.00 |           0.00 |        123 |            50 |
+|         139 | John        | Seo         | JSEO     | 650.121.2019       | 1987-07-26 | ST_CLERK   |  2700.00 |           0.00 |        123 |            50 |
+|         140 | Joshua      | Patel       | JPATEL   | 650.121.1834       | 1987-07-27 | ST_CLERK   |  2500.00 |           0.00 |        123 |            50 |
+|         192 | Sarah       | Bell        | SBELL    | 650.501.1876       | 1987-09-17 | SH_CLERK   |  4000.00 |           0.00 |        123 |            50 |
+|         193 | Britney     | Everett     | BEVERETT | 650.501.2876       | 1987-09-18 | SH_CLERK   |  3900.00 |           0.00 |        123 |            50 |
+|         194 | Samuel      | McCain      | SMCCAIN  | 650.501.3876       | 1987-09-19 | SH_CLERK   |  3200.00 |           0.00 |        123 |            50 |
+|         195 | Vance       | Jones       | VJONES   | 650.501.4876       | 1987-09-20 | SH_CLERK   |  2800.00 |           0.00 |        123 |            50 |
+|         141 | Trenna      | Rajs        | TRAJS    | 650.121.8009       | 1987-07-28 | ST_CLERK   |  3500.00 |           0.00 |        124 |            50 |
+|         142 | Curtis      | Davies      | CDAVIES  | 650.121.2994       | 1987-07-29 | ST_CLERK   |  3100.00 |           0.00 |        124 |            50 |
+|         143 | Randall     | Matos       | RMATOS   | 650.121.2874       | 1987-07-30 | ST_CLERK   |  2600.00 |           0.00 |        124 |            50 |
+|         144 | Peter       | Vargas      | PVARGAS  | 650.121.2004       | 1987-07-31 | ST_CLERK   |  2500.00 |           0.00 |        124 |            50 |
+|         196 | Alana       | Walsh       | AWALSH   | 650.507.9811       | 1987-09-21 | SH_CLERK   |  3100.00 |           0.00 |        124 |            50 |
+|         197 | Kevin       | Feeney      | KFEENEY  | 650.507.9822       | 1987-09-22 | SH_CLERK   |  3000.00 |           0.00 |        124 |            50 |
+|         198 | Donald      | OConnell    | DOCONNEL | 650.507.9833       | 1987-09-23 | SH_CLERK   |  2600.00 |           0.00 |        124 |            50 |
+|         199 | Douglas     | Grant       | DGRANT   | 650.507.9844       | 1987-09-24 | SH_CLERK   |  2600.00 |           0.00 |        124 |            50 |
+|         150 | Peter       | Tucker      | PTUCKER  | 011.44.1344.129268 | 1987-08-06 | SA_REP     | 10000.00 |           0.30 |        145 |            80 |
+|         151 | David       | Bernstein   | DBERNSTE | 011.44.1344.345268 | 1987-08-07 | SA_REP     |  9500.00 |           0.25 |        145 |            80 |
+|         152 | Peter       | Hall        | PHALL    | 011.44.1344.478968 | 1987-08-08 | SA_REP     |  9000.00 |           0.25 |        145 |            80 |
+|         153 | Christopher | Olsen       | COLSEN   | 011.44.1344.498718 | 1987-08-09 | SA_REP     |  8000.00 |           0.20 |        145 |            80 |
+|         154 | Nanette     | Cambrault   | NCAMBRAU | 011.44.1344.987668 | 1987-08-10 | SA_REP     |  7500.00 |           0.20 |        145 |            80 |
+|         155 | Oliver      | Tuvault     | OTUVAULT | 011.44.1344.486508 | 1987-08-11 | SA_REP     |  7000.00 |           0.15 |        145 |            80 |
+|         156 | Janette     | King        | JKING    | 011.44.1345.429268 | 1987-08-12 | SA_REP     | 10000.00 |           0.35 |        146 |            80 |
+|         157 | Patrick     | Sully       | PSULLY   | 011.44.1345.929268 | 1987-08-13 | SA_REP     |  9500.00 |           0.35 |        146 |            80 |
+|         158 | Allan       | McEwen      | AMCEWEN  | 011.44.1345.829268 | 1987-08-14 | SA_REP     |  9000.00 |           0.35 |        146 |            80 |
+|         159 | Lindsey     | Smith       | LSMITH   | 011.44.1345.729268 | 1987-08-15 | SA_REP     |  8000.00 |           0.30 |        146 |            80 |
+|         160 | Louise      | Doran       | LDORAN   | 011.44.1345.629268 | 1987-08-16 | SA_REP     |  7500.00 |           0.30 |        146 |            80 |
+|         161 | Sarath      | Sewall      | SSEWALL  | 011.44.1345.529268 | 1987-08-17 | SA_REP     |  7000.00 |           0.25 |        146 |            80 |
+|         162 | Clara       | Vishney     | CVISHNEY | 011.44.1346.129268 | 1987-08-18 | SA_REP     | 10500.00 |           0.25 |        147 |            80 |
+|         163 | Danielle    | Greene      | DGREENE  | 011.44.1346.229268 | 1987-08-19 | SA_REP     |  9500.00 |           0.15 |        147 |            80 |
+|         164 | Mattea      | Marvins     | MMARVINS | 011.44.1346.329268 | 1987-08-20 | SA_REP     |  7200.00 |           0.10 |        147 |            80 |
+|         165 | David       | Lee         | DLEE     | 011.44.1346.529268 | 1987-08-21 | SA_REP     |  6800.00 |           0.10 |        147 |            80 |
+|         166 | Sundar      | Ande        | SANDE    | 011.44.1346.629268 | 1987-08-22 | SA_REP     |  6400.00 |           0.10 |        147 |            80 |
+|         167 | Amit        | Banda       | ABANDA   | 011.44.1346.729268 | 1987-08-23 | SA_REP     |  6200.00 |           0.10 |        147 |            80 |
+|         168 | Lisa        | Ozer        | LOZER    | 011.44.1343.929268 | 1987-08-24 | SA_REP     | 11500.00 |           0.25 |        148 |            80 |
+|         169 | Harrison    | Bloom       | HBLOOM   | 011.44.1343.829268 | 1987-08-25 | SA_REP     | 10000.00 |           0.20 |        148 |            80 |
+|         170 | Tayler      | Fox         | TFOX     | 011.44.1343.729268 | 1987-08-26 | SA_REP     |  9600.00 |           0.20 |        148 |            80 |
+|         171 | William     | Smith       | WSMITH   | 011.44.1343.629268 | 1987-08-27 | SA_REP     |  7400.00 |           0.15 |        148 |            80 |
+|         172 | Elizabeth   | Bates       | EBATES   | 011.44.1343.529268 | 1987-08-28 | SA_REP     |  7300.00 |           0.15 |        148 |            80 |
+|         173 | Sundita     | Kumar       | SKUMAR   | 011.44.1343.329268 | 1987-08-29 | SA_REP     |  6100.00 |           0.10 |        148 |            80 |
+|         174 | Ellen       | Abel        | EABEL    | 011.44.1644.429267 | 1987-08-30 | SA_REP     | 11000.00 |           0.30 |        149 |            80 |
+|         175 | Alyssa      | Hutton      | AHUTTON  | 011.44.1644.429266 | 1987-08-31 | SA_REP     |  8800.00 |           0.25 |        149 |            80 |
+|         176 | Jonathon    | Taylor      | JTAYLOR  | 011.44.1644.429265 | 1987-09-01 | SA_REP     |  8600.00 |           0.20 |        149 |            80 |
+|         177 | Jack        | Livingston  | JLIVINGS | 011.44.1644.429264 | 1987-09-02 | SA_REP     |  8400.00 |           0.20 |        149 |            80 |
+|         178 | Kimberely   | Grant       | KGRANT   | 011.44.1644.429263 | 1987-09-03 | SA_REP     |  7000.00 |           0.15 |        149 |             0 |
+|         179 | Charles     | Johnson     | CJOHNSON | 011.44.1644.429262 | 1987-09-04 | SA_REP     |  6200.00 |           0.10 |        149 |            80 |
+|         202 | Pat         | Fay         | PFAY     | 603.123.6666       | 1987-09-27 | MK_REP     |  6000.00 |           0.00 |        201 |            20 |
+|         206 | William     | Gietz       | WGIETZ   | 515.123.8181       | 1987-10-01 | AC_ACCOUNT |  8300.00 |           0.00 |        205 |           110 |
++-------------+-------------+-------------+----------+--------------------+------------+------------+----------+----------------+------------+---------------+
+107 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc job_history;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID   | decimal(6,0) | NO   | PRI | NULL    |       |
+| START_DATE    | date         | NO   | PRI | NULL    |       |
+| END_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID        | varchar(10)  | NO   | MUL | NULL    |       |
+| DEPARTMENT_ID | decimal(4,0) | YES  | MUL | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+5 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from employees where employee_id = 0;
+Empty set (0.0022 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from employees where employee_id equals 0;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'equals 0' at line 1
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from employees where employee_id equals '0';
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'equals '0'' at line 1
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from employees where manager_id = 0;
++-------------+------------+-----------+-------+--------------+------------+---------+----------+----------------+------------+---------------+
+| EMPLOYEE_ID | FIRST_NAME | LAST_NAME | EMAIL | PHONE_NUMBER | HIRE_DATE  | JOB_ID  | SALARY   | COMMISSION_PCT | MANAGER_ID | DEPARTMENT_ID |
++-------------+------------+-----------+-------+--------------+------------+---------+----------+----------------+------------+---------------+
+|         100 | Steven     | King      | SKING | 515.123.4567 | 1987-06-17 | AD_PRES | 24000.00 |           0.00 |          0 |            90 |
++-------------+------------+-----------+-------+--------------+------------+---------+----------+----------------+------------+---------------+
+1 row in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0022 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from deparments where manager_id equals 'null';
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'equals 'null'' at line 1
+ MySQL  localhost:3306 ssl  comp2  SQL > desc employees;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| EMPLOYEE_ID    | decimal(6,0) | NO   | PRI | 0       |       |
+| FIRST_NAME     | varchar(20)  | YES  |     | NULL    |       |
+| LAST_NAME      | varchar(25)  | NO   | MUL | NULL    |       |
+| EMAIL          | varchar(25)  | NO   | UNI | NULL    |       |
+| PHONE_NUMBER   | varchar(20)  | YES  |     | NULL    |       |
+| HIRE_DATE      | date         | NO   |     | NULL    |       |
+| JOB_ID         | varchar(10)  | NO   | MUL | NULL    |       |
+| SALARY         | decimal(8,2) | YES  |     | NULL    |       |
+| COMMISSION_PCT | decimal(2,2) | YES  |     | NULL    |       |
+| MANAGER_ID     | decimal(6,0) | YES  | MUL | NULL    |       |
+| DEPARTMENT_ID  | decimal(4,0) | YES  | MUL | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+11 rows in set (0.0012 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > desc departments;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| DEPARTMENT_ID   | decimal(4,0) | NO   | PRI | 0       |       |
+| DEPARTMENT_NAME | varchar(30)  | NO   |     | NULL    |       |
+| MANAGER_ID      | decimal(6,0) | YES  | MUL | NULL    |       |
+| LOCATION_ID     | decimal(4,0) | YES  | MUL | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.0211 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select deparments where deparments is null;
+ERROR: 1054 (42S22): Unknown column 'deparments' in 'field list'
+ MySQL  localhost:3306 ssl  comp2  SQL > select deparments where manager_id is null;
+ERROR: 1054 (42S22): Unknown column 'deparments' in 'field list'
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from departments where manager_id is null;
+Empty set (0.0024 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from departments;
++---------------+----------------------+------------+-------------+
+| DEPARTMENT_ID | DEPARTMENT_NAME      | MANAGER_ID | LOCATION_ID |
++---------------+----------------------+------------+-------------+
+|            10 | Administration       |        200 |        1700 |
+|            20 | Marketing            |        201 |        1800 |
+|            30 | Purchasing           |        114 |        1700 |
+|            40 | Human Resources      |        203 |        2400 |
+|            50 | Shipping             |        121 |        1500 |
+|            60 | IT                   |        103 |        1400 |
+|            70 | Public Relations     |        204 |        2700 |
+|            80 | Sales                |        145 |        2500 |
+|            90 | Executive            |        100 |        1700 |
+|           100 | Finance              |        108 |        1700 |
+|           110 | Accounting           |        205 |        1700 |
+|           120 | Treasury             |          0 |        1700 |
+|           130 | Corporate Tax        |          0 |        1700 |
+|           140 | Control And Credit   |          0 |        1700 |
+|           150 | Shareholder Services |          0 |        1700 |
+|           160 | Benefits             |          0 |        1700 |
+|           170 | Manufacturing        |          0 |        1700 |
+|           180 | Construction         |          0 |        1700 |
+|           190 | Contracting          |          0 |        1700 |
+|           200 | Operations           |          0 |        1700 |
+|           210 | IT Support           |          0 |        1700 |
+|           220 | NOC                  |          0 |        1700 |
+|           230 | IT Helpdesk          |          0 |        1700 |
+|           240 | Government Sales     |          0 |        1700 |
+|           250 | Retail Sales         |          0 |        1700 |
+|           260 | Recruiting           |          0 |        1700 |
+|           270 | Payroll              |          0 |        1700 |
++---------------+----------------------+------------+-------------+
+27 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL > select * from departments where manager_id = 0;
++---------------+----------------------+------------+-------------+
+| DEPARTMENT_ID | DEPARTMENT_NAME      | MANAGER_ID | LOCATION_ID |
++---------------+----------------------+------------+-------------+
+|           120 | Treasury             |          0 |        1700 |
+|           130 | Corporate Tax        |          0 |        1700 |
+|           140 | Control And Credit   |          0 |        1700 |
+|           150 | Shareholder Services |          0 |        1700 |
+|           160 | Benefits             |          0 |        1700 |
+|           170 | Manufacturing        |          0 |        1700 |
+|           180 | Construction         |          0 |        1700 |
+|           190 | Contracting          |          0 |        1700 |
+|           200 | Operations           |          0 |        1700 |
+|           210 | IT Support           |          0 |        1700 |
+|           220 | NOC                  |          0 |        1700 |
+|           230 | IT Helpdesk          |          0 |        1700 |
+|           240 | Government Sales     |          0 |        1700 |
+|           250 | Retail Sales         |          0 |        1700 |
+|           260 | Recruiting           |          0 |        1700 |
+|           270 | Payroll              |          0 |        1700 |
++---------------+----------------------+------------+-------------+
+16 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  comp2  SQL >

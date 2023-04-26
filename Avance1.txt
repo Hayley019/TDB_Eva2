@@ -1,0 +1,87 @@
+MySQL Shell 8.0.32
+
+Copyright (c) 2016, 2023, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 37
+Server version: 8.0.32 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| agencia            |
+| credit_cards       |
+| eva_2              |
+| evaluacion_1       |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+10 rows in set (0.0009 sec)
+ MySQL  localhost:3306 ssl  SQL > use eva_2;
+Default schema set to `eva_2`.
+Fetching global names, object names from `eva_2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  eva_2  SQL > show tables;
++-----------------+
+| Tables_in_eva_2 |
++-----------------+
+| contacts        |
+| detalle         |
+| detalle_factura |
+| factura         |
+| maestra         |
+| phones          |
++-----------------+
+6 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table salesreps(
+                                      -> ID int not null key,
+                                      -> last_name not null, first_name not null,
+                                      -> comision
+                                      -> ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'not null, first_name not null,
+comision' at line 3
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table salesreps( ID int not null key,
+                                      -> last_name varchar(50) not null,
+                                      -> first_name varchar(50) not null,
+                                      -> comission float not null);
+Query OK, 0 rows affected (0.0134 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table customer(
+                                      -> ID int not null key, last_name varchar(50) not null,
+                                      -> first_name varchar(50) not null, companyname varchar(50),
+                                      -> street1 varchar(50), street2 varchar(50), city varchar(50),
+                                      -> state varchar(50), zipcode varchar(50), phone varchar(20),
+                                      -> fax varchar(20), email varchar(50), S_ID int not null,
+                                      -> foreing key(S_ID) references salesreps(ID) on delete restrict on update cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key(S_ID) references salesreps(ID) on delete restrict on update cascade)' at line 7
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table salesreps modify ID auto_increment;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'auto_increment' at line 1
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table salesreps modify (ID) ID auto_increment;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(ID) ID auto_increment' at line 1
+ MySQL  localhost:3306 ssl  eva_2  SQL > alter table salesreps modify ID int not null key auto_increment;
+ERROR: 1068 (42000): Multiple primary key defined
+ MySQL  localhost:3306 ssl  eva_2  SQL > drop table salesreps;
+Query OK, 0 rows affected (0.0067 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table salesreps( ID int not null key auto_increment, last_name varchar(50) not null, first_name varchar(50) not null, comission float not null);
+Query OK, 0 rows affected (0.0070 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table customer( ID int not null key, last_name varchar(50) not null, first_name varchar(50) not null, companyname varchar(50), street1 varchar(50), street2 varchar(50), city varchar(50), state varchar(50), zipcode varchar(50), phone varchar(20), fax varchar(20), email varchar(50), S_ID int not null, foreing key(S_ID) references salesreps(ID) on delete restrict on update cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key(S_ID) references salesreps(ID) on delete restrict on update cascade)' at line 1
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table customer( ID int not null key, last_name varchar(50) not null, first_name varchar(50) not null, companyname varchar(50), street1 varchar(50), street2 varchar(50), city varchar(50), state varchar(50), zipcode varchar(50), phone varchar(20), fax varchar(20), email varchar(50), S_ID int, foreing key(S_ID) references salesreps(ID) on delete restrict on update cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key(S_ID) references salesreps(ID) on delete restrict on update cascade)' at line 1
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table customer( ID int not null key, last_name varchar(50) not null, first_name varchar(50) not null, companyname varchar(50), street1 varchar(50), street2 varchar(50), city varchar(50), state varchar(50), zipcode varchar(50), phone varchar(20), fax varchar(20), email varchar(50), S_ID int, foreign key(S_ID) references salesreps(ID) on delete restrict on update cascade);
+Query OK, 0 rows affected (0.0183 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > drop table customer;
+Query OK, 0 rows affected (0.0054 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL > create table customer( ID int not null key auto_increment, last_name varchar(50) not null, first_name varchar(50) not null, companyname varchar(50), street1 varchar(50), street2 varchar(50), city varchar(50), state varchar(50), zipcode varchar(50), phone varchar(20), fax varchar(20), email varchar(50), S_ID int, foreign key(S_ID) references salesreps(ID) on delete restrict on update cascade);
+Query OK, 0 rows affected (0.0167 sec)
+ MySQL  localhost:3306 ssl  eva_2  SQL >
